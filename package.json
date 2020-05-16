@@ -1,0 +1,28 @@
+{
+  "name": "pqhong",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pqhong/pqhong.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pqhong/pqhong/issues"
+  },
+  "homepage": "https://github.com/pqhong/pqhong#readme",
+  "dependencies": {
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "terser": "^4.6.13"
+  },
+  "devDependencies": {
+    "redux-devtools": "^3.5.0"
+  }
+}
