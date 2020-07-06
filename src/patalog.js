@@ -38,7 +38,6 @@ class Patalog extends React.Component {
 		this.setState({
 			filterTypes: filterTypes
 		})
-		console.log(this.state.filterTypes)
 	}
 
 	handleFilterDone(event, val) {
@@ -52,7 +51,6 @@ class Patalog extends React.Component {
 		this.setState({
 			filterDone: filterDone
 		})
-		console.log(this.state.filterDone)
 	}
 	
 	handleToggleHave(event, item) {
@@ -167,7 +165,7 @@ class Patalog extends React.Component {
 						<span>
 							<input
 								type="checkbox"
-								checked={this.state.filterTypes.includes['furniture']}
+								checked={this.state.filterTypes.includes('furniture')}
 								onChange={event => this.handleFilterType(event, 'furniture')}
 							/>
 							Furniture
@@ -176,7 +174,7 @@ class Patalog extends React.Component {
 						<span>
 							<input
 								type="checkbox"
-								checked={this.state.filterTypes.includes['fashion']}
+								checked={this.state.filterTypes.includes('fashion')}
 								onChange={event => this.handleFilterType(event, 'fashion')}
 							/>
 							Fashion
@@ -185,7 +183,7 @@ class Patalog extends React.Component {
 						<span>
 							<input
 								type="checkbox"
-								checked={this.state.filterTypes.includes['misc']}
+								checked={this.state.filterTypes.includes('misc')}
 								onChange={event => this.handleFilterType(event, 'misc')}
 							/>
 							Misc
@@ -194,7 +192,7 @@ class Patalog extends React.Component {
 						<span>
 							<input
 								type="checkbox"
-								checked={this.state.filterTypes.includes['diy']}
+								checked={this.state.filterTypes.includes('diy')}
 								onChange={event => this.handleFilterType(event, 'diy')}
 							/>
 							DIY
@@ -205,7 +203,7 @@ class Patalog extends React.Component {
 						<span>
 							<input
 								type="checkbox"
-								checked={this.state.filterDone.includes[true]}
+								checked={this.state.filterDone.includes(true)}
 								onChange={event => this.handleFilterDone(event, true)}
 							/>
 							Complete
@@ -214,7 +212,7 @@ class Patalog extends React.Component {
 						<span>
 							<input
 								type="checkbox"
-								checked={this.state.filterDone.includes[false]}
+								checked={this.state.filterDone.includes(false)}
 								onChange={event => this.handleFilterDone(event, false)}
 							/>
 							Incomplete
@@ -245,16 +243,20 @@ class Patalog extends React.Component {
 										/>
 									</td>
 									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
-										{Object.keys(item.vars).map(variation => (
-											<div>
-												<input
-													type="checkbox"
-													checked={item.vars[variation]}
-													onChange={event => this.handleToggleVariation(event, item, variation)}
-												/>
-												{variation}
-											</div>
-										))}
+										{Object.keys(item.vars).map(variation => {
+											if (variation != 'N/A') {
+												return (
+													<div>
+														<input
+															type="checkbox"
+															checked={item.vars[variation]}
+															onChange={event => this.handleToggleVariation(event, item, variation)}
+														/>
+														{variation}
+													</div>
+												)
+											}
+										})}
 									</td>
 								</tr>
 							))}

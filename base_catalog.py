@@ -53,6 +53,8 @@ def get_items(type, categories):
                 variation = 'N/A'
             else:
                 variation = item['variation']
+            if variation == 'NA':
+                variation = 'N/A'
             if item_name not in ret.keys():
                 ret[item_name] = {
                     'type': type,
