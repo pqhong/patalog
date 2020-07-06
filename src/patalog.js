@@ -9,6 +9,8 @@ class Patalog extends React.Component {
 			filterTypes: ['furniture', 'fashion', 'misc', 'diy'],
 			filterDone: [true, false]
 		}
+		var reader
+		this.reader = reader.bind(this)
 		
 		this.handleSearch = this.handleSearch.bind(this)
 		this.handleFilterType = this.handleFilterType.bind(this)
@@ -18,6 +20,7 @@ class Patalog extends React.Component {
 		this.handleToggleVariation = this.handleToggleVariation.bind(this)
 
 		this.handleLoad = this.handleLoad.bind(this)
+		this.dispatchLoad = this.dispatchLoad.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 	}
 		
@@ -96,9 +99,13 @@ class Patalog extends React.Component {
 	
 	handleLoad(event) {
 		var load_file = event.target.files[0]
-		var reader = new FileReader()
-		var load_text = reader.readAsText(load_file)
-		var load_json = JSON.parse(load_text)
+		this.reader = new FileReader()
+		this.reader.onloadend = this.dispatchLoad
+		var load_text = this.reader.readAsText(load_file)
+	}
+
+	dispatchLoad(event) {
+		var load_json = JSON.parse(this.reader.result)
 		
 		this.props.dispatch({
 			'type': 'LOAD_FILE',
