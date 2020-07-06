@@ -19,8 +19,6 @@ class Patalog extends React.Component {
 
 		this.handleLoad = this.handleLoad.bind(this)
 		this.handleSave = this.handleSave.bind(this)
-
-		console.log(this.state)
 	}
 		
 	handleSearch(event) {
@@ -147,59 +145,61 @@ class Patalog extends React.Component {
 		return (
 			<div>
 				<header layout="align: center">
-					<div layout="display: inline-block">
-						<div>
-							Import Catalog:
+					<div layout="display: inline-block; margin: 15px">
+						<span>
+							Import Catalog:  
 							<input
 								type="file"
 								onChange={this.handleLoad}
 							/>
-						</div>
+						</span>
 
-						<button onClick={this.handleSave}>
-							Export Catalog
-						</button>
+						<span>
+							<button onClick={this.handleSave}>
+								Export Catalog
+							</button>
+						</span>
 					</div>
 
-					<div layout="display: inline-block">
-						<div>
+					<div layout="display: inline-block; margin: 15px">
+						<span>
 							<input
 								type="checkbox"
 								checked={this.state.filterTypes.includes['furniture']}
 								onChange={event => this.handleFilterType(event, 'furniture')}
 							/>
 							Furniture
-						</div>
+						</span>
 
-						<div>
+						<span>
 							<input
 								type="checkbox"
 								checked={this.state.filterTypes.includes['fashion']}
 								onChange={event => this.handleFilterType(event, 'fashion')}
 							/>
 							Fashion
-						</div>
+						</span>
 
-						<div>
+						<span>
 							<input
 								type="checkbox"
 								checked={this.state.filterTypes.includes['misc']}
 								onChange={event => this.handleFilterType(event, 'misc')}
 							/>
 							Misc
-						</div>
+						</span>
 
-						<div>
+						<span>
 							<input
 								type="checkbox"
 								checked={this.state.filterTypes.includes['diy']}
 								onChange={event => this.handleFilterType(event, 'diy')}
 							/>
 							DIY
-						</div>
+						</span>
 					</div>
 
-					<div layout="display: inline-block">
+					<div layout="display: inline-block; margin: 15px">
 						<div>
 							<input
 								type="checkbox"
@@ -219,7 +219,7 @@ class Patalog extends React.Component {
 						</div>
 					</div>
 
-					<div>
+					<div layout="display: inline-block; margin: 15px">
 						<input
 							type="text"
 							value={this.state.searchVal}
@@ -228,35 +228,37 @@ class Patalog extends React.Component {
 					</div>
 				</header>
 				
-				<table layout="align: center">
-					<tbody>
-						{sorted_items.map(item => (
-							<tr>
-								<td>{item.name}</td>
-								<td>{item.type}</td>
-								<td>
-									<input
-										type="checkbox"
-										checked={item.have}
-										onChange={event => this.handleToggleHave(event, item)}
-									/>
-								</td>
-								<td>
-									{Object.keys(item.vars).map(variation => (
-										<div>
-											<input
-												type="checkbox"
-												checked={item.vars[variation]}
-												onChange={event => this.handleToggleVariation(event, item, variation)}
-											/>
-											{variation}
-										</div>
-									))}
-								</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+				<div layout="align: center; display: inline-block; margin: 15px">
+					<table layout="width: 20%">
+						<tbody>
+							{sorted_items.map(item => (
+								<tr>
+									<td>{item.name}</td>
+									<td>{item.type}</td>
+									<td>
+										<input
+											type="checkbox"
+											checked={item.have}
+											onChange={event => this.handleToggleHave(event, item)}
+										/>
+									</td>
+									<td>
+										{Object.keys(item.vars).map(variation => (
+											<div>
+												<input
+													type="checkbox"
+													checked={item.vars[variation]}
+													onChange={event => this.handleToggleVariation(event, item, variation)}
+												/>
+												{variation}
+											</div>
+										))}
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
 			</div>
 		)
 	}
