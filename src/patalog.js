@@ -19,6 +19,8 @@ class Patalog extends React.Component {
 
 		this.handleLoad = this.handleLoad.bind(this)
 		this.handleSave = this.handleSave.bind(this)
+
+		console.log(this.state.filterDone.includes(true))
 	}
 		
 	handleSearch(event) {
@@ -108,7 +110,7 @@ class Patalog extends React.Component {
 
 	handleSave(event) {
 		var element = document.createElement('a')
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.props.catalog)))
+		element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.props.catalog)))
 
 		element.style.display = 'none'
 		document.body.appendChild(element)
@@ -228,21 +230,21 @@ class Patalog extends React.Component {
 					</div>
 				</header>
 				
-				<div style={{align: 'center', margin: '15px'}}>
-					<table style={{width: '20%'}}>
+				<div style={{display: 'inline-block', margin: '15px'}}>
+					<table style={{width: '20%', display: 'inline'}}>
 						<tbody>
 							{sorted_items.map(item => (
 								<tr>
-									<td>{item.name}</td>
-									<td>{item.type}</td>
-									<td>
+									<td style={{width: '25%', margin: '10px', border: 'solid'}}>{item.name}</td>
+									<td style={{width: '25%', margin: '10px', border: 'solid'}}>{item.type}</td>
+									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
 										<input
 											type="checkbox"
 											checked={item.have}
 											onChange={event => this.handleToggleHave(event, item)}
 										/>
 									</td>
-									<td>
+									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
 										{Object.keys(item.vars).map(variation => (
 											<div>
 												<input
