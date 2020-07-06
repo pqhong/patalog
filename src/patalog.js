@@ -232,11 +232,11 @@ class Patalog extends React.Component {
 							onChange={this.handleSearch}
 						/>
 					</div>
-				</header>
 
-				<div style={{display: 'inline-block', margin: '15px'}}>
-					Displaying {sorted_items.length} entries.
-				</div>
+					<div style={{margin: '15px'}}>
+						Displaying {sorted_items.length} entries.
+					</div>
+				</header>
 				
 				<div style={{display: 'inline-block', margin: '15px'}}>
 					<table style={{width: '20%', display: 'inline'}}>
