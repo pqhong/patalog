@@ -253,20 +253,16 @@ class Patalog extends React.Component {
 										/>
 									</td>
 									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
-										{Object.keys(item.vars).map(variation => {
-											if (item.vars.length > 1) {
-												return (
-													<div>
-														<input
-															type="checkbox"
-															checked={item.vars[variation]}
-															onChange={event => this.handleToggleVariation(event, item, variation)}
-														/>
-														{variation}
-													</div>
-												)
-											}
-										})}
+										{Object.keys(item.vars).map(variation => (
+											<div>
+												<input
+													type="checkbox"
+													checked={item.vars[variation]}
+													onChange={event => this.handleToggleVariation(event, item, variation)}
+												/>
+												{variation}
+											</div>
+										))}
 									</td>
 								</tr>
 							))}
