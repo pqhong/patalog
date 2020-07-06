@@ -19,6 +19,8 @@ class Patalog extends React.Component {
 
 		this.handleLoad = this.handleLoad.bind(this)
 		this.handleSave = this.handleSave.bind(this)
+
+		console.log(this.state)
 	}
 		
 	handleSearch(event) {
@@ -144,14 +146,14 @@ class Patalog extends React.Component {
 
 		return (
 			<div>
-				<header>
-					<div>
+				<header layout="align: center">
+					<div layout="display: inline-block">
 						<div>
+							Import Catalog:
 							<input
 								type="file"
 								onChange={this.handleLoad}
 							/>
-							Import Catalog
 						</div>
 
 						<button onClick={this.handleSave}>
@@ -159,7 +161,7 @@ class Patalog extends React.Component {
 						</button>
 					</div>
 
-					<div>
+					<div layout="display: inline-block">
 						<div>
 							<input
 								type="checkbox"
@@ -197,7 +199,7 @@ class Patalog extends React.Component {
 						</div>
 					</div>
 
-					<div>
+					<div layout="display: inline-block">
 						<div>
 							<input
 								type="checkbox"
@@ -226,7 +228,7 @@ class Patalog extends React.Component {
 					</div>
 				</header>
 				
-				<table>
+				<table layout="align: center">
 					<tbody>
 						{sorted_items.map(item => (
 							<tr>

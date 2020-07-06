@@ -1,0 +1,1 @@
+npm run build && cp -rp build/* . && sed -i "s%href=\"/static%href=\"/patalog/static%g" ./index.html && git add -A && git commit -a && git push
