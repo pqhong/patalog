@@ -108,8 +108,7 @@ class Patalog extends React.Component {
 
 	handleSave(event) {
 		var element = document.createElement('a')
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.props.catalog))
-		element.setAttribute('download', 'catalog.json')
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.props.catalog)))
 
 		element.style.display = 'none'
 		document.body.appendChild(element)
@@ -144,13 +143,14 @@ class Patalog extends React.Component {
 
 		return (
 			<div>
-				<header layout="align: center">
-					<div layout="display: inline-block; margin: 15px">
+				<header style="align: center">
+					<div style="display: inline-block; margin: 15px">
 						<span>
-							Import Catalog:  
+							Import Catalog:
 							<input
 								type="file"
 								onChange={this.handleLoad}
+								style="margin-left:15px"
 							/>
 						</span>
 
@@ -161,7 +161,7 @@ class Patalog extends React.Component {
 						</span>
 					</div>
 
-					<div layout="display: inline-block; margin: 15px">
+					<div style="display: inline-block; margin: 15px">
 						<span>
 							<input
 								type="checkbox"
@@ -199,27 +199,27 @@ class Patalog extends React.Component {
 						</span>
 					</div>
 
-					<div layout="display: inline-block; margin: 15px">
-						<div>
+					<div style="display: inline-block; margin: 15px">
+						<span>
 							<input
 								type="checkbox"
 								checked={this.state.filterDone.includes[true]}
 								onChange={event => this.handleFilterDone(event, true)}
 							/>
 							Complete
-						</div>
+						</span>
 
-						<div>
+						<span>
 							<input
 								type="checkbox"
 								checked={this.state.filterDone.includes[false]}
 								onChange={event => this.handleFilterDone(event, false)}
 							/>
 							Incomplete
-						</div>
+						</span>
 					</div>
 
-					<div layout="display: inline-block; margin: 15px">
+					<div style="display: inline-block; margin: 15px">
 						<input
 							type="text"
 							value={this.state.searchVal}
@@ -228,8 +228,8 @@ class Patalog extends React.Component {
 					</div>
 				</header>
 				
-				<div layout="align: center; display: inline-block; margin: 15px">
-					<table layout="width: 20%">
+				<div style="align: center; display: inline-block; margin: 15px">
+					<table style="width: 20%">
 						<tbody>
 							{sorted_items.map(item => (
 								<tr>
