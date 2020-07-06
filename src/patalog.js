@@ -146,12 +146,13 @@ class Patalog extends React.Component {
 			<div>
 				<header>
 					<div>
-						<input
-							type="file"
-							onChange={this.handleLoad}
-						>
+						<div>
+							<input
+								type="file"
+								onChange={this.handleLoad}
+							/>
 							Import Catalog
-						</input>
+						</div>
 
 						<button onClick={this.handleSave}>
 							Export Catalog
@@ -159,55 +160,61 @@ class Patalog extends React.Component {
 					</div>
 
 					<div>
-						<input
-							type="checkbox"
-							checked={this.state.filterTypes.includes['furniture']}
-							onChange={event => this.handleFilterType(event, 'furniture')}
-						>
+						<div>
+							<input
+								type="checkbox"
+								checked={this.state.filterTypes.includes['furniture']}
+								onChange={event => this.handleFilterType(event, 'furniture')}
+							/>
 							Furniture
-						</input>
+						</div>
 
-						<input
-							type="checkbox"
-							checked={this.state.filterTypes.includes['fashion']}
-							onChange={event => this.handleFilterType(event, 'fashion')}
-						>
+						<div>
+							<input
+								type="checkbox"
+								checked={this.state.filterTypes.includes['fashion']}
+								onChange={event => this.handleFilterType(event, 'fashion')}
+							/>
 							Fashion
-						</input>
+						</div>
 
-						<input
-							type="checkbox"
-							checked={this.state.filterTypes.includes['misc']}
-							onChange={event => this.handleFilterType(event, 'misc')}
-						>
+						<div>
+							<input
+								type="checkbox"
+								checked={this.state.filterTypes.includes['misc']}
+								onChange={event => this.handleFilterType(event, 'misc')}
+							/>
 							Misc
-						</input>
+						</div>
 
-						<input
-							type="checkbox"
-							checked={this.state.filterTypes.includes['diy']}
-							onChange={event => this.handleFilterType(event, 'diy')}
-						>
+						<div>
+							<input
+								type="checkbox"
+								checked={this.state.filterTypes.includes['diy']}
+								onChange={event => this.handleFilterType(event, 'diy')}
+							/>
 							DIY
-						</input>
+						</div>
 					</div>
 
 					<div>
-						<input
-							type="checkbox"
-							checked={this.state.filterDone.includes[true]}
-							onChange={event => this.handleFilterDone(event, true)}
-						>
+						<div>
+							<input
+								type="checkbox"
+								checked={this.state.filterDone.includes[true]}
+								onChange={event => this.handleFilterDone(event, true)}
+							/>
 							Complete
-						</input>
+						</div>
 
-						<input
-							type="checkbox"
-							checked={this.state.filterDone.includes[false]}
-							onChange={event => this.handleFilterDone(event, false)}
-						>
+						<div>
+							<input
+								type="checkbox"
+								checked={this.state.filterDone.includes[false]}
+								onChange={event => this.handleFilterDone(event, false)}
+							/>
 							Incomplete
-						</input>
+						</div>
 					</div>
 
 					<div>
@@ -234,13 +241,14 @@ class Patalog extends React.Component {
 								</td>
 								<td>
 									{Object.keys(item.vars).map(variation => (
-										<input
-											type="checkbox"
-											checked={item.vars[variation]}
-											onChange={event => this.handleToggleVariation(event, item, variation)}
-										>
+										<div>
+											<input
+												type="checkbox"
+												checked={item.vars[variation]}
+												onChange={event => this.handleToggleVariation(event, item, variation)}
+											/>
 											{variation}
-										</input>
+										</div>
 									))}
 								</td>
 							</tr>
