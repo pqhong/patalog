@@ -98,7 +98,7 @@ class Patalog extends React.Component {
 		var load_file = event.target.files[0]
 		var reader = new FileReader()
 		var load_text = reader.readAsText(load_file)
-		var load_json = JSON.parse(load_text)[0]
+		var load_json = JSON.parse(load_text)
 		
 		this.props.dispatch({
 			'type': 'LOAD_FILE',
