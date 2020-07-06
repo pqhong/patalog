@@ -19,8 +19,6 @@ class Patalog extends React.Component {
 
 		this.handleLoad = this.handleLoad.bind(this)
 		this.handleSave = this.handleSave.bind(this)
-
-		console.log(this.state.filterDone.includes(true))
 	}
 		
 	handleSearch(event) {
@@ -40,6 +38,7 @@ class Patalog extends React.Component {
 		this.setState({
 			filterTypes: filterTypes
 		})
+		console.log(this.state.filterTypes)
 	}
 
 	handleFilterDone(event, val) {
@@ -53,6 +52,7 @@ class Patalog extends React.Component {
 		this.setState({
 			filterDone: filterDone
 		})
+		console.log(this.state.filterDone)
 	}
 	
 	handleToggleHave(event, item) {
