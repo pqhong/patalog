@@ -9,8 +9,7 @@ class Patalog extends React.Component {
 			filterTypes: ['furniture', 'fashion', 'misc', 'diy'],
 			filterDone: [true, false]
 		}
-		var reader = new FileReader()
-		this.reader = reader.bind(this)
+		this.reader = new FileReader()
 		
 		this.handleSearch = this.handleSearch.bind(this)
 		this.handleFilterType = this.handleFilterType.bind(this)
