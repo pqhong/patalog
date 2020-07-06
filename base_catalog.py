@@ -27,12 +27,13 @@ FASHION_CATEGORIES = [
     'Umbrellas'
 ]
 MISC_CATEGORIES = [
-    'Floor',
+    'Floors',
     'Music',
     'Rugs',
-    'Wallpaper'
+    'Wallpapers'
 ]
-BASE_URL = 'https://acnh.tnrd.net/api/v1/'
+DIY_CATEGORY = 'Recipes'
+BASE_URL = 'https://acnh.tnrd.net/api/v3/'
 
 
 def get_items(type, categories):
@@ -45,8 +46,8 @@ def get_items(type, categories):
         for item in items:
             item_name = item['name']
             if category == 'Art':
-                variation = 'Real' if item['isGenuine'] else 'Fake'
-            elif category in ['Umbrellas', 'Floor', 'Music', 'Rugs', 'Wallpaper']:
+                variation = 'Real' if item['genuine'] else 'Fake'
+            elif category in ['Umbrellas', 'Floors', 'Music', 'Rugs', 'Wallpapers', 'Recipes']:
                 variation = 'N/A'
             else:
                 variation = item['variation']
@@ -63,8 +64,9 @@ def get_items(type, categories):
 furniture = get_items('furniture', FURNITURE_CATEGORIES)
 fashion = get_items('fashion', FASHION_CATEGORIES)
 misc = get_items('misc', MISC_CATEGORIES)
+diy = get_items('diy', [DIY_CATEGORY])
 
-catalog = dict(**furniture, **fashion, **misc)
+catalog = dict(**furniture, **fashion, **misc, **diy)
 
 with open(CATALOG_FILENAME, 'w') as f:
     json.dump(catalog, f, separators=(',', ':'))
