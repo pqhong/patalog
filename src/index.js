@@ -13,7 +13,7 @@ class App extends React.Component {
 		this.state = {
 			searchVal: '',
 			filterTypes: ['furniture', 'fashion', 'misc', 'diy'],
-			filterDone: [True, False]
+			filterDone: [true, false]
 		}
 		
 		this.handleSearch = this.handleSearch.bind(this)
@@ -34,8 +34,8 @@ class App extends React.Component {
 	}
 
 	handleFilterType(event, type) {
-		filterTypes = this.state.filterTypes
-		idx = filterTypes.indexOf(type)
+		var filterTypes = this.state.filterTypes
+		var idx = filterTypes.indexOf(type)
 		if (idx > -1) {
 			filterTypes.splice(idx, 1)
 		} else {
@@ -47,8 +47,8 @@ class App extends React.Component {
 	}
 
 	handleFilterDone(event, val) {
-		filterDone = this.state.filterDone
-		idx = filterDone.indexOf(val)
+		var filterDone = this.state.filterDone
+		var idx = filterDone.indexOf(val)
 		if (idx > -1) {
 			filterDone.splice(idx, 1)
 		} else {
@@ -80,10 +80,10 @@ class App extends React.Component {
 	
 	handleToggleVariation(event, item, variation) {
 		item.vars[variation] = !item.vars[variation]
-		item.have = True
+		item.have = true
 		item.vars.keys().forEach(variation => {
 			if (!item.vars[variation]) {
-				item.have = False
+				item.have = false
 			}
 		})
 
@@ -101,10 +101,10 @@ class App extends React.Component {
 	}
 	
 	handleLoad(event) {
-		load_file = event.target.files[0]
-		reader = new FileReader()
-		load_text = reader.readAsText(load_file)
-		load_json = JSON.parse(load_text)
+		var load_file = event.target.files[0]
+		var reader = new FileReader()
+		var load_text = reader.readAsText(load_file)
+		var load_json = JSON.parse(load_text)
 		
 		this.props.dispatch({
 			'type': 'LOAD_FILE',
@@ -124,7 +124,7 @@ class App extends React.Component {
 	}
 	
 	render() {
-		item_list = this.props.catalog.keys().map(name => (
+		var item_list = this.props.catalog.keys().map(name => (
 			{
 				name: name,
 				type: this.props.catalog[name].type,
@@ -133,12 +133,12 @@ class App extends React.Component {
 			}
 		))
 
-		filtered_items = item_list
+		var filtered_items = item_list
 		filtered_items = filtered_items.filter(item => item.name.includes(this.state.searchVal))
 		filtered_items = filtered_items.filter(item => this.state.filterTypes.includes(item.type))
 		filtered_items = filtered_items.filter(item => this.state.filterDone.includes(item.have))
 
-		sorted_items = filtered_items.sort((a, b) => {
+		var sorted_items = filtered_items.sort((a, b) => {
 			if (a.name < b.name) {
 				return -1
 			}
@@ -201,16 +201,16 @@ class App extends React.Component {
 					<div>
 						<input
 							type="checkbox"
-							checked={this.state.filterDone.includes[True]}
-							onChange={event => this.handleFilterDone(event, True)}
+							checked={this.state.filterDone.includes[true]}
+							onChange={event => this.handleFilterDone(event, true)}
 						>
 							Complete
 						</input>
 
 						<input
 							type="checkbox"
-							checked={this.state.filterDone.includes[False]}
-							onChange={event => this.handleFilterDone(event, False)}
+							checked={this.state.filterDone.includes[false]}
+							onChange={event => this.handleFilterDone(event, false)}
 						>
 							Incomplete
 						</input>
@@ -273,7 +273,6 @@ export default connect(
 	mapDispatchToProps
 )(App)
 
-app.store = store
 const rootElement = document.getElementById("root")
 ReactDOM.render(
 	<Provider store={store}>
