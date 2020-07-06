@@ -108,8 +108,8 @@ class Patalog extends React.Component {
 
 	handleSave(event) {
 		var element = document.createElement('a')
-		element.setAttribute('href', 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.props.catalog)))
-
+		element.href = URL.createObjectURL(new Blob(JSON.stringify(this.props.catalog), {type:'application/json'}))
+		element.download = 'catalog.json'
 		element.style.display = 'none'
 		document.body.appendChild(element)
 		element.click()
