@@ -144,7 +144,7 @@ class Patalog extends React.Component {
 		return (
 			<div>
 				<header style={{align: 'center'}}>
-					<div style={{display: 'inline-block', margin: '15px'}}>
+					<div style={{margin: '15px'}}>
 						<span>
 							Import Catalog:
 							<input
@@ -161,7 +161,7 @@ class Patalog extends React.Component {
 						</span>
 					</div>
 
-					<div style={{display: 'inline-block', margin: '15px'}}>
+					<div style={{margin: '15px'}}>
 						<span>
 							<input
 								type="checkbox"
@@ -199,7 +199,7 @@ class Patalog extends React.Component {
 						</span>
 					</div>
 
-					<div style={{display: 'inline-block', margin: '15px'}}>
+					<div style={{margin: '15px'}}>
 						<span>
 							<input
 								type="checkbox"
@@ -219,7 +219,7 @@ class Patalog extends React.Component {
 						</span>
 					</div>
 
-					<div style={{display: 'inline-block', margin: '15px'}}>
+					<div style={{margin: '15px'}}>
 						<input
 							type="text"
 							value={this.state.searchVal}
@@ -228,7 +228,7 @@ class Patalog extends React.Component {
 					</div>
 				</header>
 				
-				<div style={{align: 'center', display: 'inline-block', margin: '15px'}}>
+				<div style={{align: 'center', margin: '15px'}}>
 					<table style={{width: '20%'}}>
 						<tbody>
 							{sorted_items.map(item => (

@@ -44,7 +44,9 @@ def get_items(type, categories):
         res = requests.get(api_url)
         items = res.json()
         for item in items:
-            item_name = item['name']
+            item_name = item['name'].lower().replace('.', '')
+            if category == 'Recipes':
+                item_name += ' '
             if category == 'Art':
                 variation = 'Real' if item['genuine'] else 'Fake'
             elif category in ['Umbrellas', 'Floors', 'Music', 'Rugs', 'Wallpapers', 'Recipes']:
