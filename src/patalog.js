@@ -55,7 +55,7 @@ class Patalog extends React.Component {
 	
 	handleToggleHave(event, item) {
 		item.have = !item.have
-		item.vars.keys().forEach(variation => {
+		Object.keys(item.vars).forEach(variation => {
 			item.vars[variation] = item.have
 		})
 
@@ -75,7 +75,7 @@ class Patalog extends React.Component {
 	handleToggleVariation(event, item, variation) {
 		item.vars[variation] = !item.vars[variation]
 		item.have = true
-		item.vars.keys().forEach(variation => {
+		Object.keys(item.vars).forEach(variation => {
 			if (!item.vars[variation]) {
 				item.have = false
 			}
@@ -118,7 +118,7 @@ class Patalog extends React.Component {
 	}
 	
 	render() {
-		var item_list = this.props.catalog.keys().map(name => (
+		var item_list = Object.keys(this.props.catalog).map(name => (
 			{
 				name: name,
 				type: this.props.catalog[name].type,
@@ -233,7 +233,7 @@ class Patalog extends React.Component {
 									/>
 								</td>
 								<td>
-									{item.vars.keys().map(variation => (
+									{Object.keys(item.vars).map(variation => (
 										<input
 											type="checkbox"
 											checked={item.vars[variation]}
