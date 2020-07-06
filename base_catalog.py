@@ -44,7 +44,7 @@ def get_items(type, categories):
         res = requests.get(api_url)
         items = res.json()
         for item in items:
-            item_name = item['name'].lower().replace('.', '')
+            item_name = item['name'].lower().replace('.', '').replace('\'', '').replace('-', ' ')
             if category == 'Recipes':
                 item_name += ' '
             if category == 'Art':

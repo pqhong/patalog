@@ -233,6 +233,10 @@ class Patalog extends React.Component {
 						/>
 					</div>
 				</header>
+
+				<div style={{display: 'inline-block', margin: '15px'}}>
+					Displaying {sorted_items.length} entries.
+				</div>
 				
 				<div style={{display: 'inline-block', margin: '15px'}}>
 					<table style={{width: '20%', display: 'inline'}}>
@@ -250,7 +254,7 @@ class Patalog extends React.Component {
 									</td>
 									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
 										{Object.keys(item.vars).map(variation => {
-											if (variation != 'N/A') {
+											if (item.vars.length > 1) {
 												return (
 													<div>
 														<input
