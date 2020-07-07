@@ -7,9 +7,12 @@ class Patalog extends React.Component {
 		this.state = {
 			searchVal: '',
 			filterTypes: ['furniture', 'fashion', 'misc', 'diy'],
-			filterDone: [true, false]
+			filterDone: [true, false],
+			darkMode: false
 		}
 		this.reader = new FileReader()
+
+		this.handleDarkMode = this.handleDarkMode.bind(this)
 		
 		this.handleSearch = this.handleSearch.bind(this)
 		this.handleFilterType = this.handleFilterType.bind(this)
@@ -21,6 +24,12 @@ class Patalog extends React.Component {
 		this.handleLoad = this.handleLoad.bind(this)
 		this.dispatchLoad = this.dispatchLoad.bind(this)
 		this.handleSave = this.handleSave.bind(this)
+	}
+
+	handleDarkMode(event) {
+		this.setState({
+			darkMode: true
+		})
 	}
 		
 	handleSearch(event) {
@@ -147,9 +156,22 @@ class Patalog extends React.Component {
 			return 0
 		})
 
+		if (this.state.darkMode) {
+			return (
+				<div style={{backgroundColor: 'black'}} />
+			)
+		}
 		return (
 			<div>
 				<header style={{align: 'center'}}>
+					<div style={{marginTop: '15px'}}>
+						<span style={{fontSize: '150%'}}>Patalog</span>
+						<button style={{align: 'right'}} onClick={this.handleDarkMode}>
+							Dark Mode
+						</button>
+					</div>
+					<div style={{marginBottom: '10px', fontSize: '50%'}}>v1.1.4</div>
+
 					<div style={{margin: '15px'}}>
 						<span>
 							Import Catalog:
@@ -168,7 +190,7 @@ class Patalog extends React.Component {
 					</div>
 
 					<div style={{margin: '15px'}}>
-						<span>
+						<span style={{margin: '5px'}}>
 							<input
 								type="checkbox"
 								checked={this.state.filterTypes.includes('furniture')}
@@ -177,7 +199,7 @@ class Patalog extends React.Component {
 							Furniture
 						</span>
 
-						<span>
+						<span style={{margin: '5px'}}>
 							<input
 								type="checkbox"
 								checked={this.state.filterTypes.includes('fashion')}
@@ -186,7 +208,7 @@ class Patalog extends React.Component {
 							Fashion
 						</span>
 
-						<span>
+						<span style={{margin: '5px'}}>
 							<input
 								type="checkbox"
 								checked={this.state.filterTypes.includes('misc')}
@@ -195,7 +217,7 @@ class Patalog extends React.Component {
 							Misc
 						</span>
 
-						<span>
+						<span style={{margin: '5px'}}>
 							<input
 								type="checkbox"
 								checked={this.state.filterTypes.includes('diy')}
@@ -206,7 +228,7 @@ class Patalog extends React.Component {
 					</div>
 
 					<div style={{margin: '15px'}}>
-						<span>
+						<span style={{margin: '5px'}}>
 							<input
 								type="checkbox"
 								checked={this.state.filterDone.includes(true)}
@@ -215,7 +237,7 @@ class Patalog extends React.Component {
 							Complete
 						</span>
 
-						<span>
+						<span style={{margin: '5px'}}>
 							<input
 								type="checkbox"
 								checked={this.state.filterDone.includes(false)}
