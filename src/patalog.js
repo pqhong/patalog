@@ -158,19 +158,17 @@ class Patalog extends React.Component {
 
 		if (this.state.darkMode) {
 			return (
-				<div style={{backgroundColor: 'black'}} />
+				<div style={{backgroundColor: 'black', height: '100vh', width: '100vw'}} />
 			)
 		}
 		return (
 			<div>
 				<header style={{align: 'center'}}>
-					<div style={{marginTop: '15px'}}>
-						<span style={{fontSize: '150%'}}>Patalog</span>
-						<button style={{align: 'right'}} onClick={this.handleDarkMode}>
-							Dark Mode
-						</button>
-					</div>
-					<div style={{marginBottom: '10px', fontSize: '50%'}}>v1.1.4</div>
+					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
+					<div style={{fontSize: '80%'}}>v1.1.5</div>
+					<button onClick={this.handleDarkMode}>
+						Dark Mode
+					</button>
 
 					<div style={{margin: '15px'}}>
 						<span>
