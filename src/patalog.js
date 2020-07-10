@@ -335,26 +335,26 @@ class Patalog extends React.Component {
 				<div style={{display: 'inline-block', margin: '15px'}}>
 					<table style={{width: '20%', display: 'inline'}}>
 						<thead>
-							<th style={{width: '25%', margin: '10px'}}>Name</th>
-							<th style={{width: '25%', margin: '10px'}}>Type</th>
-							<th style={{width: '25%', margin: '10px'}}>Complete</th>
-							<th style={{width: '25%', margin: '10px'}}>Variations</th>
-							<th style={{width: '25%', margin: '10px'}}>Availability</th>
-							<th style={{width: '25%', margin: '10px'}}>Freeze Row</th>
+							<th style={{width: '30%', margin: '10px'}}>Name</th>
+							<th style={{width: '10%', margin: '10px'}}>Type</th>
+							<th style={{width: '10%', margin: '10px'}}>Complete</th>
+							<th style={{width: '30%', margin: '10px'}}>Variations</th>
+							<th style={{width: '30%', margin: '10px'}}>Availability</th>
+							<th style={{width: '10%', margin: '10px'}}>Freeze Row</th>
 						</thead>
 						<tbody>
 							{sorted_items.map(item => (
 								<tr>
-									<td style={{width: '25%', margin: '10px', border: 'solid'}}>{item.name}</td>
-									<td style={{width: '25%', margin: '10px', border: 'solid'}}>{item.type}</td>
-									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
+									<td style={{width: '30%', margin: '10px', border: 'solid'}}>{item.name}</td>
+									<td style={{width: '10%', margin: '10px', border: 'solid'}}>{item.type}</td>
+									<td style={{width: '10%', margin: '10px', border: 'solid'}}>
 										<input
 											type="checkbox"
 											checked={item.have}
 											onChange={event => this.handleToggleHave(event, item)}
 										/>
 									</td>
-									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
+									<td style={{width: '30%', margin: '10px', border: 'solid'}}>
 										{item.vars.map(vobj => (
 											<div>
 												<input
@@ -367,8 +367,8 @@ class Patalog extends React.Component {
 											</div>
 										))}
 									</td>
-									<td style={{width: '25%', margin: '10px', border: 'solid'}}>{item.get}</td>
-									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
+									<td style={{width: '30%', margin: '10px', border: 'solid'}}>{item.get}</td>
+									<td style={{width: '10%', margin: '10px', border: 'solid'}}>
 										<input
 											type="checkbox"
 											checked={this.state.frozenRows.includes(item.name)}
