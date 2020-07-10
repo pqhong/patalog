@@ -391,7 +391,7 @@ diy = get_items('diy', [DIY_CATEGORY])
 fish = get_items('fish', [FISH_CATEGORY])
 bugs = get_items('bugs', [BUG_CATEGORY])
 
-catalog = dict(**furniture, **fashion, **misc, **diy)
+catalog = dict(**furniture, **fashion, **misc, **diy, **fish, **bugs)
 
 catalog = update_1_3_0(cat=catalog)
 
