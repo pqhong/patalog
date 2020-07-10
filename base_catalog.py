@@ -395,5 +395,10 @@ catalog = dict(**furniture, **fashion, **misc, **diy, **fish, **bugs)
 
 catalog = update_1_3_0(cat=catalog)
 
+content = {
+    'version': 2,
+    'catalog': catalog
+}
+
 with open(CATALOG_FILENAME, 'w') as f:
-    json.dump(catalog, f, separators=(',', ':'))
+    json.dump(content, f, separators=(',', ':'))

@@ -142,14 +142,18 @@ class Patalog extends React.Component {
 		var load_json = JSON.parse(this.reader.result)
 		
 		this.props.dispatch({
-			'type': 'LOAD_FILE',
-			payload: load_json
+			type: 'LOAD_FILE',
+			payload: load_json['catalog']
 		})
 	}
 
 	handleSave(event) {
+		var content = {
+			version: 2,
+			catalog: this.props.catalog
+		}
 		var element = document.createElement('a')
-		element.href = URL.createObjectURL(new Blob([JSON.stringify(this.props.catalog)], {type:'application/json;charset=utf-8'}))
+		element.href = URL.createObjectURL(new Blob([JSON.stringify(content)], {type:'application/json;charset=utf-8'}))
 		element.download = 'catalog.json'
 		element.style.display = 'none'
 		document.body.appendChild(element)
