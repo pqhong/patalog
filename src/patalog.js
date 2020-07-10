@@ -8,7 +8,9 @@ class Patalog extends React.Component {
 			searchVal: '',
 			filterTypes: ['furniture', 'fashion', 'misc', 'diy'],
 			filterDone: [true, false],
-			darkMode: false
+			darkMode: false,
+			frozenRows: [],
+			frozenOnly: false
 		}
 		this.reader = new FileReader()
 
@@ -17,9 +19,12 @@ class Patalog extends React.Component {
 		this.handleSearch = this.handleSearch.bind(this)
 		this.handleFilterType = this.handleFilterType.bind(this)
 		this.handleFilterDone = this.handleFilterDone.bind(this)
+		this.handleToggleFrozen = this.handleToggleFrozen.bind(this)
 
 		this.handleToggleHave = this.handleToggleHave.bind(this)
 		this.handleToggleVariation = this.handleToggleVariation.bind(this)
+
+		this.handleFreeze = this.handleFreeze.bind(this)
 
 		this.handleLoad = this.handleLoad.bind(this)
 		this.dispatchLoad = this.dispatchLoad.bind(this)
@@ -63,11 +68,17 @@ class Patalog extends React.Component {
 			filterDone: filterDone
 		})
 	}
+
+	handleToggleFrozen(event) {
+		this.setState({
+			frozenOnly: !this.state.frozenOnly
+		})
+	}
 	
 	handleToggleHave(event, item) {
 		item.have = !item.have
-		Object.keys(item.vars).forEach(variation => {
-			item.vars[variation] = item.have
+		Object.keys(item.vars).forEach(vid => {
+			item.vars[vid].have = item.have
 		})
 
 		this.props.dispatch({
@@ -77,17 +88,18 @@ class Patalog extends React.Component {
 				value: {
 					type: item.type,
 					have: item.have,
-					vars: item.vars
+					vars: item.vars,
+					get: item.get
 				}
 			}
 		})
 	}
 	
-	handleToggleVariation(event, item, variation) {
-		item.vars[variation] = !item.vars[variation]
+	handleToggleVariation(event, item, vid) {
+		item.vars[vid].have = !item.vars[vid].have
 		item.have = true
-		Object.keys(item.vars).forEach(variation => {
-			if (!item.vars[variation]) {
+		Object.keys(item.vars).forEach(vid => {
+			if (!item.vars[vid].have) {
 				item.have = false
 			}
 		})
@@ -99,9 +111,23 @@ class Patalog extends React.Component {
 				value: {
 					type: item.type,
 					have: item.have,
-					vars: item.vars
+					vars: item.vars,
+					get: item.get
 				}
 			}
+		})
+	}
+
+	handleFreeze(event, val) {
+		var frozenRows = this.state.frozenRows
+		var idx = frozenRows.indexOf(val)
+		if (idx > -1) {
+			frozenRows.splice(idx, 1)
+		} else {
+			frozenRows.push(val)
+		}
+		this.setState({
+			frozenRows: frozenRows
 		})
 	}
 	
@@ -137,14 +163,26 @@ class Patalog extends React.Component {
 				name: name,
 				type: this.props.catalog[name].type,
 				have: this.props.catalog[name].have,
-				vars: this.props.catalog[name].vars
+				vars: Object.keys(this.props.catalog[name].vars).sort().map(vid => (
+					{
+						vid: vid,
+						variation: this.props.catalog[name].vars[vid].variation,
+						have: this.props.catalog[name].vars[vid].have,
+						img: this.props.catalog[name].vars[vid].img
+					}
+				)),
+				get: this.props.catalog[name].get
 			}
 		))
 
 		var filtered_items = item_list
-		filtered_items = filtered_items.filter(item => item.name.includes(this.state.searchVal))
-		filtered_items = filtered_items.filter(item => this.state.filterTypes.includes(item.type))
-		filtered_items = filtered_items.filter(item => this.state.filterDone.includes(item.have))
+		if (this.state.frozenOnly) {
+			filtered_items = filtered_items.filter(item => this.state.frozenRows.includes(item.name))
+		} else {
+			filtered_items = filtered_items.filter(item => item.name.includes(this.state.searchVal) || this.state.frozenRows.includes(item.name))
+			filtered_items = filtered_items.filter(item => this.state.filterTypes.includes(item.type) || this.state.frozenRows.includes(item.name))
+			filtered_items = filtered_items.filter(item => this.state.filterDone.includes(item.have) || this.state.frozenRows.includes(item.name))
+		}
 
 		var sorted_items = filtered_items.sort((a, b) => {
 			if (a.name < b.name) {
@@ -165,8 +203,8 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v1.1.5</div>
-					<button onClick={this.handleDarkMode}>
+					<div style={{fontSize: '80%'}}>v1.3.0</div>
+					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
 
@@ -247,6 +285,15 @@ class Patalog extends React.Component {
 
 					<div style={{margin: '15px'}}>
 						<input
+							type="checkbox"
+							checked={this.state.frozenOnly}
+							onChange={event => this.handleToggleFrozen(event)}
+						/>
+						Frozen Rows Only
+					</div>
+
+					<div style={{margin: '15px'}}>
+						<input
 							type="text"
 							value={this.state.searchVal}
 							onChange={this.handleSearch}
@@ -260,6 +307,14 @@ class Patalog extends React.Component {
 				
 				<div style={{display: 'inline-block', margin: '15px'}}>
 					<table style={{width: '20%', display: 'inline'}}>
+						<thead>
+							<th style={{width: '25%', margin: '10px'}}>Name</th>
+							<th style={{width: '25%', margin: '10px'}}>Type</th>
+							<th style={{width: '25%', margin: '10px'}}>Complete</th>
+							<th style={{width: '25%', margin: '10px'}}>Variations</th>
+							<th style={{width: '25%', margin: '10px'}}>Availability</th>
+							<th style={{width: '25%', margin: '10px'}}>Freeze Row</th>
+						</thead>
 						<tbody>
 							{sorted_items.map(item => (
 								<tr>
@@ -273,16 +328,25 @@ class Patalog extends React.Component {
 										/>
 									</td>
 									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
-										{Object.keys(item.vars).map(variation => (
+										{Object.keys(item.vars).map(vobj => (
 											<div>
 												<input
 													type="checkbox"
-													checked={item.vars[variation]}
-													onChange={event => this.handleToggleVariation(event, item, variation)}
+													checked={item.vars[vobj.vid].have}
+													onChange={event => this.handleToggleVariation(event, item, vobj.vid)}
 												/>
-												{variation}
+												{item.vars[vobj.vid].variation}
+												<ImageLink link={item.vars[vobj.vid].img} />
 											</div>
 										))}
+									</td>
+									<td style={{width: '25%', margin: '10px', border: 'solid'}}>{item.get}</td>
+									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
+										<input
+											type="checkbox"
+											checked={this.state.frozenRows.includes(item.name)}
+											onChange={event => this.handleFreeze(event, item.name)}
+										/>
 									</td>
 								</tr>
 							))}
@@ -292,6 +356,18 @@ class Patalog extends React.Component {
 			</div>
 		)
 	}
+}
+
+function ImageLink(props) {
+	if (props.link === '') {
+		return <span />;
+	}
+	return <a 
+				href={props.link}
+				target='_blank'
+		   >
+				[image]
+		   </a>
 }
 
 const mapStateToProps = state => {
