@@ -1,6 +1,6 @@
 import { createStore } from 'redux'
 
-const initialState = require('./catalog.json')
+const initialState = require('./catalog.json')['catalog']
 
 const reducer = (state = initialState, action) => {
 	switch(action.type) {
