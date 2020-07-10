@@ -6,7 +6,7 @@ class Patalog extends React.Component {
 		super()
 		this.state = {
 			searchVal: '',
-			filterTypes: ['furniture', 'fashion', 'misc', 'diy'],
+			filterTypes: ['furniture', 'fashion', 'misc', 'diy', 'fish', 'bugs', 'sea'],
 			filterDone: [true, false],
 			darkMode: false,
 			frozenRows: [],
@@ -175,6 +175,8 @@ class Patalog extends React.Component {
 			}
 		))
 
+		console.log(item_list)
+
 		var filtered_items = item_list
 		if (this.state.frozenOnly) {
 			filtered_items = filtered_items.filter(item => this.state.frozenRows.includes(item.name))
@@ -260,6 +262,33 @@ class Patalog extends React.Component {
 								onChange={event => this.handleFilterType(event, 'diy')}
 							/>
 							DIY
+						</span>
+
+						<span style={{margin: '5px'}}>
+							<input
+								type="checkbox"
+								checked={this.state.filterTypes.includes('fish')}
+								onChange={event => this.handleFilterType(event, 'fish')}
+							/>
+							Fish
+						</span>
+
+						<span style={{margin: '5px'}}>
+							<input
+								type="checkbox"
+								checked={this.state.filterTypes.includes('bugs')}
+								onChange={event => this.handleFilterType(event, 'bugs')}
+							/>
+							Bugs
+						</span>
+
+						<span style={{margin: '5px'}}>
+							<input
+								type="checkbox"
+								checked={this.state.filterTypes.includes('sea')}
+								onChange={event => this.handleFilterType(event, 'sea')}
+							/>
+							Sea Creatures
 						</span>
 					</div>
 
