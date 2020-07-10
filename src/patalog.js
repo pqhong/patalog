@@ -367,7 +367,14 @@ class Patalog extends React.Component {
 											</div>
 										))}
 									</td>
-									<td style={{width: '30%', margin: '10px', border: 'solid'}}>{item.get}</td>
+									<td style={{width: '30%', margin: '10px', border: 'solid'}}>
+										{item.get.split('\n').map((item, key) => (
+											<span key={key}>
+												{item}
+												<br />
+											</span>
+										))}
+									</td>
 									<td style={{width: '10%', margin: '10px', border: 'solid'}}>
 										<input
 											type="checkbox"
@@ -393,7 +400,7 @@ function ImageLink(props) {
 				href={props.link}
 				target='_blank'
 		   >
-				[image]
+				&nbsp;[image]
 		   </a>
 }
 
