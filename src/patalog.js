@@ -175,8 +175,6 @@ class Patalog extends React.Component {
 			}
 		))
 
-		console.log(item_list)
-
 		var filtered_items = item_list
 		if (this.state.frozenOnly) {
 			filtered_items = filtered_items.filter(item => this.state.frozenRows.includes(item.name))
@@ -357,7 +355,7 @@ class Patalog extends React.Component {
 										/>
 									</td>
 									<td style={{width: '25%', margin: '10px', border: 'solid'}}>
-										{Object.keys(item.vars).map(vobj => (
+										{item.vars.map(vobj => (
 											<div>
 												<input
 													type="checkbox"
