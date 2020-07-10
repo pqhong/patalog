@@ -396,12 +396,14 @@ function ImageLink(props) {
 	if (props.link === '') {
 		return <span />;
 	}
-	return <a 
-				href={props.link}
-				target='_blank'
-		   >
-				&nbsp;[image]
-		   </a>
+	return <span>
+			   &nbsp;
+			   <a
+			       href={props.link}
+				   target='_blank'>
+				       [image]
+			   </a>
+		   </span>;
 }
 
 const mapStateToProps = state => {
