@@ -359,11 +359,11 @@ class Patalog extends React.Component {
 											<div>
 												<input
 													type="checkbox"
-													checked={item.vars[vobj.vid].have}
+													checked={vobj.have}
 													onChange={event => this.handleToggleVariation(event, item, vobj.vid)}
 												/>
-												{item.vars[vobj.vid].variation}
-												<ImageLink link={item.vars[vobj.vid].img} />
+												{vobj.variation}
+												<ImageLink link={vobj.img} />
 											</div>
 										))}
 									</td>
