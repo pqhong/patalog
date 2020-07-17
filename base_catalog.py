@@ -55,9 +55,7 @@ def get_items(type, categories):
                 ('\'', ''),
                 ('\u00e9', 'e'),
                 ('\u00e1', 'a'),
-                ('\u00e0', 'a'),
-                ('\u2190', '<'),
-                ('\u2192', '>')
+                ('\u00e0', 'a')
             ]
             for replacement in replacements:
                 item_name = item_name.replace(replacement[0], replacement[1])
@@ -76,8 +74,11 @@ def get_items(type, categories):
             else:
                 variation = item['variation']
                 vid = item['variantID'][0] if 'variantID' in item and item['variantID'] else item['filename'][-1]
-            if variation == 'NA':
+            if variation == 'NA' or variation is None:
                 variation = 'N/A'
+            variation = variation.replace('\u00e9', 'e')
+            variation = variation.replace('\u2190', '<')
+            variation = variation.replace('\u2192', '>')
 
             if category == 'Recipes':
                 img = ''
@@ -119,10 +120,11 @@ def get_items(type, categories):
                     avail = []
                     for m in ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']:
                         t = item[h + m]
-                        if t != 'NA':
+                        if 'NA' not in t:
                             if not time:
                                 for slot in t:
-                                    slot.replace('\u00A0', ' ')
+                                    slot = slot.replace('\u2013', '-')
+                                    slot = slot.replace('\u00a0', ' ')
                                     time.append(slot)
                             avail.append(m)
                     if h == 'nh':
@@ -322,46 +324,46 @@ def update_1_3_0(cat):
             }
 
     sea_1_3_0 = [
-        ('abalone', 'https://acnhcdn.com/latest/MenuIcon/Awabi.png', 'Dive\n'),
-        ('acorn barnacle', 'https://acnhcdn.com/latest/MenuIcon/Fujitsubo.png', 'Dive\n'),
-        ('chambered nautilus', 'https://acnhcdn.com/latest/MenuIcon/Oumugai.png', 'Dive\n'),
-        ('dungeness crab', 'https://acnhcdn.com/latest/MenuIcon/DungenessCrab.png', 'Dive\n'),
-        ('firefly squid', 'https://acnhcdn.com/latest/MenuIcon/Hotaruika.png', 'Dive\n'),
-        ('flatworm', 'https://acnhcdn.com/latest/MenuIcon/Hiramushi.png', 'Dive\n'),
-        ('gazami crab', 'https://acnhcdn.com/latest/MenuIcon/Gazami.png', 'Dive\n'),
-        ('giant isopod', 'https://acnhcdn.com/latest/MenuIcon/Daiougusokumushi.png', 'Dive\n'),
-        ('gigas giant clam', 'https://acnhcdn.com/latest/MenuIcon/Shakogai.png', 'Dive\n'),
-        ('horseshoe crab', 'https://acnhcdn.com/latest/MenuIcon/Kabutogani.png', 'Dive\n'),
-        ('lobster', 'https://acnhcdn.com/latest/MenuIcon/Fish54.png', 'Dive\n'),
-        ('mantis shrimp', 'https://acnhcdn.com/latest/MenuIcon/Shako.png', 'Dive\n'),
-        ('moon jellyfish', 'https://acnhcdn.com/latest/MenuIcon/Mizukurage.png', 'Dive\n'),
-        ('mussel', 'https://acnhcdn.com/latest/MenuIcon/Muhrugai.png', 'Dive\n'),
-        ('octopus', 'https://acnhcdn.com/latest/MenuIcon/Tako.png', 'Dive\n'),
-        ('oyster', 'https://acnhcdn.com/latest/MenuIcon/Kaki.png', 'Dive\n'),
-        ('pearl oyster', 'https://acnhcdn.com/latest/MenuIcon/Akoyagai.png', 'Dive\n'),
-        ('red king crab', 'https://acnhcdn.com/latest/MenuIcon/Tarabagani.png', 'Dive\n'),
-        ('scallop', 'https://acnhcdn.com/latest/MenuIcon/Hotate.png', 'Dive\n'),
-        ('sea anemone', 'https://acnhcdn.com/latest/MenuIcon/Isogintyaku.png', 'Dive\n'),
-        ('sea cucumber', 'https://acnhcdn.com/latest/MenuIcon/Namako.png', 'Dive\n'),
-        ('sea grapes', 'https://acnhcdn.com/latest/MenuIcon/Umibudou.png', 'Dive\n'),
-        ('sea pig', 'https://acnhcdn.com/latest/MenuIcon/Senjunamako.png', 'Dive\n'),
-        ('sea pineapple', 'https://acnhcdn.com/latest/MenuIcon/Hoya.png', 'Dive\n'),
-        ('sea slug', 'https://acnhcdn.com/latest/MenuIcon/Umiushi.png', 'Dive\n'),
-        ('sea star', 'https://acnhcdn.com/latest/MenuIcon/Hitode.png', 'Dive\n'),
-        ('sea urchin', 'https://acnhcdn.com/latest/MenuIcon/Uni.png', 'Dive\n'),
-        ('seaweed', 'https://acnhcdn.com/latest/MenuIcon/Wakame.png', 'Dive\n'),
-        ('slate pencil urchin', 'https://acnhcdn.com/latest/MenuIcon/Paipuuni.png', 'Dive\n'),
-        ('snow crab', 'https://acnhcdn.com/latest/MenuIcon/Zuwaigani.png', 'Dive\n'),
-        ('spider crab', 'https://acnhcdn.com/latest/MenuIcon/Takaashigani.png', 'Dive\n'),
-        ('spiny lobster', 'https://acnhcdn.com/latest/MenuIcon/Iseebi.png', 'Dive\n'),
-        ('spotted garden eel', 'https://acnhcdn.com/latest/MenuIcon/Chinanago.png', 'Dive\n'),
-        ('sweet shrimp', 'https://acnhcdn.com/latest/MenuIcon/Amaebi.png', 'Dive\n'),
-        ('tiger prawn', 'https://acnhcdn.com/latest/MenuIcon/Kurumaebi.png', 'Dive\n'),
-        ('turban shell', 'https://acnhcdn.com/latest/MenuIcon/Sazae.png', 'Dive\n'),
-        ('umbrella octopus', 'https://acnhcdn.com/latest/MenuIcon/Mendako.png', 'Dive\n'),
-        ('vampire squid', 'https://acnhcdn.com/latest/MenuIcon/Koumoridako.png', 'Dive\n'),
-        ('venus flower basket', 'https://acnhcdn.com/latest/MenuIcon/Kairoudouketsu.png', 'Dive\n'),
-        ('whelk', 'https://acnhcdn.com/latest/MenuIcon/Baigai.png', 'Dive\n')
+        ('abalone', 'https://acnhcdn.com/latest/MenuIcon/Awabi.png', 'Dive\nNH: Jan, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Dec\n4 PM - 9 AM'),
+        ('acorn barnacle', 'https://acnhcdn.com/latest/MenuIcon/Fujitsubo.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nAll day'),
+        ('chambered nautilus', 'https://acnhcdn.com/latest/MenuIcon/Oumugai.png', 'Dive\nNH: Mar, Apr, May, Jun, Sep, Oct, Nov\nSH: Mar, Apr, May, Sep, Oct, Nov, Dec\n4 PM - 9 AM'),
+        ('dungeness crab', 'https://acnhcdn.com/latest/MenuIcon/DungenessCrab.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Nov, Dec\nSH: May, Jun, Jul, Aug, Sep, Oct, Nov\nAll day'),
+        ('firefly squid', 'https://acnhcdn.com/latest/MenuIcon/Hotaruika.png', 'Dive\nNH: Mar, Apr, May, Jun\nSH: Sep, Oct, Nov, Dec\n9 PM - 4 AM'),
+        ('flatworm', 'https://acnhcdn.com/latest/MenuIcon/Hiramushi.png', 'Dive\nNH: Aug, Sep\nSH: Feb, Mar\n4 PM - 9 AM'),
+        ('gazami crab', 'https://acnhcdn.com/latest/MenuIcon/Gazami.png', 'Dive\nNH: Jun, Jul, Aug, Sep, Oct, Nov\nSH: Jan, Feb, Mar, Apr, May, Dec\nAll day'),
+        ('giant isopod', 'https://acnhcdn.com/latest/MenuIcon/Daiougusokumushi.png', 'Dive\nNH: Jul, Aug, Sep, Oct\nSH: Jan, Feb, Mar, Apr\n9 AM - 4 PM, 9 PM - 4 AM'),
+        ('gigas giant clam', 'https://acnhcdn.com/latest/MenuIcon/Shakogai.png', 'Dive\nNH: May, Jun, Jul, Aug, Sep\nSH: Jan, Feb, Mar, Nov, Dec\nAll day'),
+        ('horseshoe crab', 'https://acnhcdn.com/latest/MenuIcon/Kabutogani.png', 'Dive\nNH: Jul, Aug, Sep\nSH: Jan, Feb, Mar\n9 PM - 4 AM'),
+        ('lobster', 'https://acnhcdn.com/latest/MenuIcon/Fish54.png', 'Dive\nNH: Jan, Apr, May, Jun, Dec\nSH: Jun, Jul, Oct, Nov, Dec\nAll day'),
+        ('mantis shrimp', 'https://acnhcdn.com/latest/MenuIcon/Shako.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\n4 PM - 9 AM'),
+        ('moon jellyfish', 'https://acnhcdn.com/latest/MenuIcon/Mizukurage.png', 'Dive\nNH: Jul, Aug, Sep\nSH: Jan, Feb, Mar\nAll day'),
+        ('mussel', 'https://acnhcdn.com/latest/MenuIcon/Muhrugai.png', 'Dive\nNH: Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Dec\nAll day'),
+        ('octopus', 'https://acnhcdn.com/latest/MenuIcon/Tako.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nAll day'),
+        ('oyster', 'https://acnhcdn.com/latest/MenuIcon/Kaki.png', 'Dive\nNH: Jan, Feb, Sep, Oct, Nov, Dec\nSH: Mar, Apr, May, Jun, Jul, Aug\nAll day'),
+        ('pearl oyster', 'https://acnhcdn.com/latest/MenuIcon/Akoyagai.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nAll day'),
+        ('red king crab', 'https://acnhcdn.com/latest/MenuIcon/Tarabagani.png', 'Dive\nNH: Jan, Feb, Mar, Nov, Dec\nSH: May, Jun, Jul, Aug, Sep\nAll day'),
+        ('scallop', 'https://acnhcdn.com/latest/MenuIcon/Hotate.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nAll day'),
+        ('sea anemone', 'https://acnhcdn.com/latest/MenuIcon/Isogintyaku.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nAll day'),
+        ('sea cucumber', 'https://acnhcdn.com/latest/MenuIcon/Namako.png', 'Dive\nNH: Jan, Feb, Mar, Apr, Nov, Dec\nSH: May, Jun, Jul, Aug, Sep, Oct\nAll day'),
+        ('sea grapes', 'https://acnhcdn.com/latest/MenuIcon/Umibudou.png', 'Dive\nNH: Jun, Jul, Aug, Sep\nSH: Jan, Feb, Mar, Dec\nAll day'),
+        ('sea pig', 'https://acnhcdn.com/latest/MenuIcon/Senjunamako.png', 'Dive\nNH: Jan, Feb, Nov, Dec\nSH: May, Jun, Jul, Aug\n4 PM - 9 AM'),
+        ('sea pineapple', 'https://acnhcdn.com/latest/MenuIcon/Hoya.png', 'Dive\nNH: Apr, May, Jun, Jul, Aug\nSH: Jan, Feb, Oct, Nov, Dec\nAll day'),
+        ('sea slug', 'https://acnhcdn.com/latest/MenuIcon/Umiushi.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nAll day'),
+        ('sea star', 'https://acnhcdn.com/latest/MenuIcon/Hitode.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nAll day'),
+        ('sea urchin', 'https://acnhcdn.com/latest/MenuIcon/Uni.png', 'Dive\nNH: May, Jun, Jul, Aug, Sep\nSH: Jan, Feb, Mar, Nov, Dec\nAll day'),
+        ('seaweed', 'https://acnhcdn.com/latest/MenuIcon/Wakame.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Oct, Nov, Dec\nSH: Jan, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nAll day'),
+        ('slate pencil urchin', 'https://acnhcdn.com/latest/MenuIcon/Paipuuni.png', 'Dive\nNH: May, Jun, Jul, Aug, Sep\nSH: Jan, Feb, Mar, Nov, Dec\n4 PM - 9 AM'),
+        ('snow crab', 'https://acnhcdn.com/latest/MenuIcon/Zuwaigani.png', 'Dive\nNH: Jan, Feb, Mar, Apr, Nov, Dec\nSH: May, Jun, Jul, Aug, Sep, Oct\nAll day'),
+        ('spider crab', 'https://acnhcdn.com/latest/MenuIcon/Takaashigani.png', 'Dive\nNH: Mar, Apr\nSH: Sep, Oct\nAll day'),
+        ('spiny lobster', 'https://acnhcdn.com/latest/MenuIcon/Iseebi.png', 'Dive\nNH: Oct, Nov, Dec\nSH: Apr, May, Jun\n9 PM - 4 AM'),
+        ('spotted garden eel', 'https://acnhcdn.com/latest/MenuIcon/Chinanago.png', 'Dive\nNH: May, Jun, Jul, Aug, Sep, Oct\nSH: Jan, Feb, Mar, Apr, Nov, Dec\n4 AM - 9 PM'),
+        ('sweet shrimp', 'https://acnhcdn.com/latest/MenuIcon/Amaebi.png', 'Dive\nNH: Jan, Feb, Sep, Oct, Nov, Dec\nSH: Mar, Apr, May, Jun, Jul, Aug\n4 PM - 9 AM'),
+        ('tiger prawn', 'https://acnhcdn.com/latest/MenuIcon/Kurumaebi.png', 'Dive\nNH: Jun, Jul, Aug, Sep\nSH: Jan, Feb, Mar, Dec\n4 PM - 9 AM'),
+        ('turban shell', 'https://acnhcdn.com/latest/MenuIcon/Sazae.png', 'Dive\nNH: Mar, Apr, May, Sep, Oct, Nov, Dec\nSH: Mar, Apr, May, Jun, Sep, Oct, Nov\nAll day'),
+        ('umbrella octopus', 'https://acnhcdn.com/latest/MenuIcon/Mendako.png', 'Dive\nNH: Mar, Apr, May, Sep, Oct, Nov\nSH: Mar, Apr, May, Sep, Oct, Nov\nAll day'),
+        ('vampire squid', 'https://acnhcdn.com/latest/MenuIcon/Koumoridako.png', 'Dive\nNH: May, Jun, Jul, Aug\nSH: Jan, Feb, Nov, Dec\n4 PM - 9 AM'),
+        ('venus flower basket', 'https://acnhcdn.com/latest/MenuIcon/Kairoudouketsu.png', 'Dive\nNH: Jan, Feb, Oct, Nov, Dec\nSH: Apr, May, Jun, Jul, Aug\nAll day'),
+        ('whelk', 'https://acnhcdn.com/latest/MenuIcon/Baigai.png', 'Dive\nNH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nSH: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec\nAll day')
     ]
     for s in sea_1_3_0:
         cat[s[0]] = {
@@ -396,7 +398,7 @@ catalog = dict(**furniture, **fashion, **misc, **diy, **fish, **bugs)
 catalog = update_1_3_0(cat=catalog)
 
 content = {
-    'version': 2,
+    'version': 3,
     'catalog': catalog
 }
 
