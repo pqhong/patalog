@@ -177,30 +177,32 @@ class Patalog extends React.Component {
 		this.reader = new FileReader()
 		this.reader.onloadend = this.dispatchLoad
 		var load_text = this.reader.readAsText(load_file)
+		console.log(load_text)
 	}
 
 	dispatchLoad(event) {
 		var load_json = JSON.parse(this.reader.result)
+		console.log(load_json)
 		this.doLoad(load_json)
 	}
 
 	doLoad(event, load_json) {
-		if (load_json['version'] < this.state.schemaVersion) {
+		if (load_json.version < this.state.schemaVersion) {
 			load_json = this.updateCatalog(load_json)
 		}
 		
 		this.props.dispatch({
 			type: 'LOAD_FILE',
-			payload: load_json['catalog']
+			payload: load_json.catalog
 		})
 	}
 
 	updateCatalog(event, old_json) {
-		var version = old_json['version']
+		var version = old_json.version
 		var new_json = {}
 		if (version < 4) {
 			var new_catalog = this.props.catalog
-			var old_catalog = old_json['catalog']
+			var old_catalog = old_json.catalog
 
 			Object.keys(new_catalog).forEach(item_name => {
 				if (Array.isArray(old_catalog[item_name].vars)) {
@@ -228,9 +230,9 @@ class Patalog extends React.Component {
 				}
 			})
 
-			new_json['catalog'] = new_catalog
-			new_json['cookie'] = false
-			new_json['version'] = 4
+			new_json.catalog = new_catalog
+			new_json.cookie = false
+			new_json.version = 4
 			version = 4
 		}
 		return new_json
