@@ -188,7 +188,7 @@ class Patalog extends React.Component {
 		reader.readAsText(load_file)
 	}
 
-	updateCatalog(event, old_json) {
+	updateCatalog(old_json) {
 		var version = old_json.version
 		var new_json = {}
 		if (version < 4) {
