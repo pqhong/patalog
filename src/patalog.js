@@ -10,11 +10,16 @@ class Patalog extends React.Component {
 			filterDone: [true, false],
 			darkMode: false,
 			frozenRows: [],
-			frozenOnly: false
+			frozenOnly: false,
+			schemaVersion: 4,
+			saveCookie: false
 		}
 		this.reader = new FileReader()
 
 		this.handleDarkMode = this.handleDarkMode.bind(this)
+
+		this.handleCookie = this.handleCookie.bind(this)
+		this.dispatchCookie = this.dispatchCookie.bind(this)
 		
 		this.handleSearch = this.handleSearch.bind(this)
 		this.handleFilterType = this.handleFilterType.bind(this)
@@ -28,13 +33,33 @@ class Patalog extends React.Component {
 
 		this.handleLoad = this.handleLoad.bind(this)
 		this.dispatchLoad = this.dispatchLoad.bind(this)
+		this.doLoad = this.doLoad.bind(this)
+		this.updateCatalog = this.updateCatalog.bind(this)
 		this.handleSave = this.handleSave.bind(this)
+
+		this.setCookie = this.setCookie.bind(this)
+		this.getCookie = this.getCookie.bind(this)
+		this.clearCookie = this.clearCookie.bind(this)
 	}
 
 	handleDarkMode(event) {
 		this.setState({
 			darkMode: true
 		})
+	}
+
+	handleCookie(event) {
+		this.setState({
+			saveCookie: !this.state.saveCookie
+		}, this.dispatchCookie)
+	}
+
+	dispatchCookie(event) {
+		if (this.state.saveCookie) {
+			this.setCookie()
+		} else {
+			this.clearCookie()
+		}
 	}
 		
 	handleSearch(event) {
@@ -77,8 +102,14 @@ class Patalog extends React.Component {
 	
 	handleToggleHave(event, item) {
 		item.have = !item.have
+		var variations = {}
 		Object.keys(item.vars).forEach(vid => {
 			item.vars[vid].have = item.have
+			variations[item.vars[vid].vid] = {
+				variation: item.vars[vid].variation,
+				have: item.vars[vid].have,
+				img: item.vars[vid].img
+			}
 		})
 
 		this.props.dispatch({
@@ -88,19 +119,27 @@ class Patalog extends React.Component {
 				value: {
 					type: item.type,
 					have: item.have,
-					vars: item.vars,
+					vars: variations,
 					get: item.get
 				}
 			}
 		})
+
+		this.setCookie()
 	}
 	
 	handleToggleVariation(event, item, vid) {
 		item.vars[vid].have = !item.vars[vid].have
 		item.have = true
+		var variations = {}
 		Object.keys(item.vars).forEach(vid => {
 			if (!item.vars[vid].have) {
 				item.have = false
+			}
+			variations[item.vars[vid].vid] = {
+				variation: item.vars[vid].variation,
+				have: item.vars[vid].have,
+				img: item.vars[vid].img
 			}
 		})
 
@@ -111,11 +150,13 @@ class Patalog extends React.Component {
 				value: {
 					type: item.type,
 					have: item.have,
-					vars: item.vars,
+					vars: variations,
 					get: item.get
 				}
 			}
 		})
+
+		this.setCookie()
 	}
 
 	handleFreeze(event, val) {
@@ -140,6 +181,13 @@ class Patalog extends React.Component {
 
 	dispatchLoad(event) {
 		var load_json = JSON.parse(this.reader.result)
+		this.doLoad(load_json)
+	}
+
+	doLoad(event, load_json) {
+		if (load_json['version'] < this.state.schemaVersion) {
+			load_json = this.updateCatalog(load_json)
+		}
 		
 		this.props.dispatch({
 			type: 'LOAD_FILE',
@@ -147,9 +195,51 @@ class Patalog extends React.Component {
 		})
 	}
 
+	updateCatalog(event, old_json) {
+		var version = old_json['version']
+		var new_json = {}
+		if (version < 4) {
+			var new_catalog = this.props.catalog
+			var old_catalog = old_json['catalog']
+
+			Object.keys(new_catalog).forEach(item_name => {
+				if (Array.isArray(old_catalog[item_name].vars)) {
+					old_catalog[item_name].vars.forEach(ovid => {
+						Object.keys(new_catalog[item_name].vars).forEach(nvid => {
+							if (new_catalog[item_name].vars[nvid].variation == old_catalog[item_name].vars[ovid].variation) {
+								new_catalog[item_name].vars[nvid].have = old_catalog[item_name].vars[ovid].have
+							}
+						})
+					})
+				} else {
+					Object.keys(old_catalog[item_name].vars).forEach(ovid => {
+						Object.keys(new_catalog[item_name].vars).forEach(nvid => {
+							if (new_catalog[item_name].vars[nvid].variation == old_catalog[item_name].vars[ovid].variation) {
+								new_catalog[item_name].vars[nvid].have = old_catalog[item_name].vars[ovid].have
+							}
+						})
+					})
+				}
+				new_catalog[item_name].have = old_catalog[item_name].have
+				if (new_catalog[item_name].have) {
+					Object.keys(new_catalog[item_name].vars).forEach(vid => {
+						new_catalog[item_name].vars[vid].have = true
+					})
+				}
+			})
+
+			new_json['catalog'] = new_catalog
+			new_json['cookie'] = false
+			new_json['version'] = 4
+			version = 4
+		}
+		return new_json
+	}
+
 	handleSave(event) {
 		var content = {
-			version: 2,
+			version: this.state.schemaVersion,
+			cookie: this.state.saveCookie,
 			catalog: this.props.catalog
 		}
 		var element = document.createElement('a')
@@ -159,6 +249,43 @@ class Patalog extends React.Component {
 		document.body.appendChild(element)
 		element.click()
 		document.body.removeChild(element)
+	}
+
+	setCookie(event) {
+		var content = {
+			version: this.state.schemaVersion,
+			cookie: this.state.saveCookie,
+			catalog: this.props.catalog
+		}
+		var data = btoa(JSON.stringify(content))
+		var date = new Date()
+		var expire_days = 500
+		date.setTime(date.getTime() + expire_days*24*60*60*1000)
+		var expires = ';expires=' + date.toUTCString()
+		document.cookie = 'data=' + data + expires + ';path=/'
+	}
+
+	getCookie(event) {
+		if (document.cookie) {
+			var cookie = decodeURIComponent(document.cookie)
+			var meta = cookie.split(';')
+			for (var i = 0; i < meta.length; i++) {
+				var elem = meta[i]
+				while (elem.charAt(0) == ' ') {
+					elem = elem.substring(1)
+				}
+				if (elem.indexOf('data=') == 0) {
+					var data = JSON.parse(atob(elem.substring(5)))
+					this.doLoad(data)
+				}
+			}
+		}
+	}
+
+	clearCookie(event) {
+		var date = new Date()
+		date.setTime(date.getTime())
+		document.cookie = 'data=;expires=' + date.toUTCString() + ';path=/'
 	}
 	
 	render() {
@@ -207,10 +334,21 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v1.3.0</div>
+					<div style={{fontSize: '80%'}}>v2.0.0</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
+
+					<div style={{margin: '15px'}}>
+						<span>
+							<input
+								type="checkbox"
+								checked={this.state.saveCookie}
+								onChange={event => this.handleCookie(event)}
+							/>
+							Save Catalog as Cookie
+						</span>
+					</div>
 
 					<div style={{margin: '15px'}}>
 						<span>
@@ -393,6 +531,10 @@ class Patalog extends React.Component {
 				</div>
 			</div>
 		)
+	}
+
+	componentDidMount() {
+		this.getCookie()
 	}
 }
 

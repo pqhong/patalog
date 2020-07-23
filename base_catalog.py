@@ -79,6 +79,10 @@ def get_items(type, categories):
             variation = variation.replace('\u00e9', 'e')
             variation = variation.replace('\u2190', '<')
             variation = variation.replace('\u2192', '>')
+            check_vid = False
+            if not vid.isdigit():
+                vid = '0'
+                check_vid = True
 
             if category == 'Recipes':
                 img = ''
@@ -177,6 +181,8 @@ def get_items(type, categories):
                     'get': get
                 }
             else:
+                if check_vid:
+                    vid = str(len(ret[item_name]['vars'].keys()))
                 ret[item_name]['vars'][vid] = var_obj
             
             if category in ['Fish', 'Insects']:
@@ -383,6 +389,10 @@ def update_1_3_0(cat):
             },
             'get': s[2]
         }
+
+    # Remove invalid items
+    for invalid in ['hazure01', 'hazure02', 'hazure03']:
+        cat.pop(invalid, None)
     
     return cat
 
@@ -398,7 +408,8 @@ catalog = dict(**furniture, **fashion, **misc, **diy, **fish, **bugs)
 catalog = update_1_3_0(cat=catalog)
 
 content = {
-    'version': 3,
+    'version': 4,
+    'cookie': False,
     'catalog': catalog
 }
 
