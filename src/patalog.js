@@ -11,8 +11,7 @@ class Patalog extends React.Component {
 			darkMode: false,
 			frozenRows: [],
 			frozenOnly: false,
-			schemaVersion: 4,
-			saveCookie: false
+			schemaVersion: 5
 		}
 		this.reader = new FileReader()
 
@@ -35,31 +34,12 @@ class Patalog extends React.Component {
 		this.doLoad = this.doLoad.bind(this)
 		this.updateCatalog = this.updateCatalog.bind(this)
 		this.handleSave = this.handleSave.bind(this)
-
-		this.setCookie = this.setCookie.bind(this)
-		this.getCookie = this.getCookie.bind(this)
-		this.clearCookie = this.clearCookie.bind(this)
 	}
 
 	handleDarkMode(event) {
 		this.setState({
 			darkMode: true
 		})
-	}
-
-	handleCookie(event) {
-		this.setState({
-			saveCookie: !this.state.saveCookie
-		}, this.dispatchCookie)
-	}
-
-	dispatchCookie(event) {
-		console.log(this.state.saveCookie)
-		if (this.state.saveCookie) {
-			this.setCookie()
-		} else {
-			this.clearCookie()
-		}
 	}
 		
 	handleSearch(event) {
@@ -124,8 +104,6 @@ class Patalog extends React.Component {
 				}
 			}
 		})
-
-		this.setCookie()
 	}
 	
 	handleToggleVariation(event, item, vid) {
@@ -155,8 +133,6 @@ class Patalog extends React.Component {
 				}
 			}
 		})
-
-		this.setCookie()
 	}
 
 	handleFreeze(event, val) {
@@ -191,14 +167,15 @@ class Patalog extends React.Component {
 			type: 'LOAD_FILE',
 			payload: load_json.catalog
 		})
+
+		this.forceUpdate()
 	}
 
-	updateCatalog(old_json) {
-		var version = old_json.version
-		var new_json = {}
+	updateCatalog(update_json) {
+		var version = update_json.version
 		if (version < 4) {
 			var new_catalog = this.props.catalog
-			var old_catalog = old_json.catalog
+			var old_catalog = update_json.catalog
 
 			Object.keys(new_catalog).forEach(item_name => {
 				if (Array.isArray(old_catalog[item_name].vars)) {
@@ -226,12 +203,19 @@ class Patalog extends React.Component {
 				}
 			})
 
-			new_json.catalog = new_catalog
-			new_json.cookie = false
-			new_json.version = 4
+			update_json.catalog = new_catalog
+			update_json.cookie = false
+			update_json.version = 4
 			version = 4
 		}
-		return new_json
+		if (version < 5) {
+			update_json = {
+				catalog: update_json.catalog,
+				version: 5
+			}
+			version = 5
+		}
+		return update_json
 	}
 
 	handleSave(event) {
@@ -247,46 +231,6 @@ class Patalog extends React.Component {
 		document.body.appendChild(element)
 		element.click()
 		document.body.removeChild(element)
-	}
-
-	setCookie(event) {
-		console.log(this.state.saveCookie)
-		if (this.state.saveCookie) {
-			var content = {
-				version: this.state.schemaVersion,
-				cookie: this.state.saveCookie,
-				catalog: this.props.catalog
-			}
-			var data = btoa(JSON.stringify(content))
-			var date = new Date()
-			var expire_days = 500
-			date.setTime(date.getTime() + expire_days*24*60*60*1000)
-			var expires = ';expires=' + date.toUTCString()
-			document.cookie = 'data=' + data + expires + ';path=/'
-		}
-	}
-
-	getCookie(event) {
-		if (document.cookie) {
-			var cookie = decodeURIComponent(document.cookie)
-			var meta = cookie.split(';')
-			for (var i = 0; i < meta.length; i++) {
-				var elem = meta[i]
-				while (elem.charAt(0) == ' ') {
-					elem = elem.substring(1)
-				}
-				if (elem.indexOf('data=') == 0) {
-					var data = JSON.parse(atob(elem.substring(5)))
-					this.doLoad(data)
-				}
-			}
-		}
-	}
-
-	clearCookie(event) {
-		var date = new Date()
-		date.setTime(date.getTime())
-		document.cookie = 'data=;expires=' + date.toUTCString() + ';path=/'
 	}
 	
 	render() {
@@ -335,21 +279,10 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.0.0</div>
+					<div style={{fontSize: '80%'}}>v2.1.0</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
-
-					<div style={{margin: '15px'}}>
-						<span>
-							<input
-								type="checkbox"
-								checked={this.state.saveCookie}
-								onChange={event => this.handleCookie(event)}
-							/>
-							Save Catalog as Cookie
-						</span>
-					</div>
 
 					<div style={{margin: '15px'}}>
 						<span>
