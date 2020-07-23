@@ -177,7 +177,6 @@ class Patalog extends React.Component {
 		this.reader = new FileReader()
 		this.reader.onloadend = this.dispatchLoad
 		var load_text = this.reader.readAsText(load_file)
-		console.log(load_text)
 	}
 
 	dispatchLoad(event) {
@@ -187,6 +186,7 @@ class Patalog extends React.Component {
 	}
 
 	doLoad(event, load_json) {
+		console.log(load_json)
 		if (load_json.version < this.state.schemaVersion) {
 			load_json = this.updateCatalog(load_json)
 		}
