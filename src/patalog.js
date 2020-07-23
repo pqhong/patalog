@@ -51,10 +51,10 @@ class Patalog extends React.Component {
 		this.setState({
 			saveCookie: !this.state.saveCookie
 		}, this.dispatchCookie)
-		this.setCookie()
 	}
 
 	dispatchCookie(event) {
+		console.log(this.state.saveCookie)
 		if (this.state.saveCookie) {
 			this.setCookie()
 		} else {
@@ -250,6 +250,7 @@ class Patalog extends React.Component {
 	}
 
 	setCookie(event) {
+		console.log(this.state.saveCookie)
 		if (this.state.saveCookie) {
 			var content = {
 				version: this.state.schemaVersion,
