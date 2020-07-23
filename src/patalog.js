@@ -32,7 +32,6 @@ class Patalog extends React.Component {
 		this.handleFreeze = this.handleFreeze.bind(this)
 
 		this.handleLoad = this.handleLoad.bind(this)
-		this.dispatchLoad = this.dispatchLoad.bind(this)
 		this.updateCatalog = this.updateCatalog.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 
@@ -173,22 +172,20 @@ class Patalog extends React.Component {
 	
 	handleLoad(event) {
 		var load_file = event.target.files[0]
-		this.reader = new FileReader()
-		this.reader.onloadend = this.dispatchLoad
-		var load_text = this.reader.readAsText(load_file)
-	}
+		var reader = new FileReader()
+		reader.onloadend = () => {
+			var load_json = JSON.parse(reader.result)
 
-	dispatchLoad(event) {
-		var load_json = JSON.parse(this.reader.result)
-
-		if (load_json.version < this.state.schemaVersion) {
-			load_json = this.updateCatalog(load_json)
+			if (load_json.version < this.state.schemaVersion) {
+				load_json = this.updateCatalog(load_json)
+			}
+			
+			this.props.dispatch({
+				type: 'LOAD_FILE',
+				payload: load_json.catalog
+			})
 		}
-		
-		this.props.dispatch({
-			type: 'LOAD_FILE',
-			payload: load_json.catalog
-		})
+		reader.readAsText(load_file)
 	}
 
 	updateCatalog(event, old_json) {
