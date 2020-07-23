@@ -13,7 +13,6 @@ class Patalog extends React.Component {
 			frozenOnly: false,
 			schemaVersion: 5
 		}
-		this.reader = new FileReader()
 
 		this.handleDarkMode = this.handleDarkMode.bind(this)
 		
@@ -28,7 +27,6 @@ class Patalog extends React.Component {
 		this.handleFreeze = this.handleFreeze.bind(this)
 
 		this.handleLoad = this.handleLoad.bind(this)
-		this.doLoad = this.doLoad.bind(this)
 		this.updateCatalog = this.updateCatalog.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 	}
@@ -150,22 +148,19 @@ class Patalog extends React.Component {
 		var reader = new FileReader()
 		reader.onloadend = () => {
 			var load_json = JSON.parse(reader.result)
-			this.doLoad(load_json)
+
+			if (load_json.version < this.state.schemaVersion) {
+				load_json = this.updateCatalog(load_json)
+			}
+	
+			this.props.dispatch({
+				type: 'LOAD_FILE',
+				payload: load_json.catalog
+			})
+	
+			this.forceUpdate()
 		}
 		reader.readAsText(load_file)
-	}
-
-	doLoad(load_json) {
-		if (load_json.version < this.state.schemaVersion) {
-			load_json = this.updateCatalog(load_json)
-		}
-
-		this.props.dispatch({
-			type: 'LOAD_FILE',
-			payload: load_json.catalog
-		})
-
-		this.forceUpdate()
 	}
 
 	updateCatalog(update_json) {
@@ -462,10 +457,6 @@ class Patalog extends React.Component {
 				</div>
 			</div>
 		)
-	}
-
-	componentDidMount() {
-		this.getCookie()
 	}
 }
 
