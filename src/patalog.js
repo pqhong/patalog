@@ -197,10 +197,10 @@ class Patalog extends React.Component {
 
 			Object.keys(new_catalog).forEach(item_name => {
 				if (Array.isArray(old_catalog[item_name].vars)) {
-					old_catalog[item_name].vars.forEach(ovid => {
+					old_catalog[item_name].vars.forEach(ovar => {
 						Object.keys(new_catalog[item_name].vars).forEach(nvid => {
-							if (new_catalog[item_name].vars[nvid].variation == old_catalog[item_name].vars[ovid].variation) {
-								new_catalog[item_name].vars[nvid].have = old_catalog[item_name].vars[ovid].have
+							if (new_catalog[item_name].vars[nvid].variation == ovar.variation) {
+								new_catalog[item_name].vars[nvid].have = ovar.have
 							}
 						})
 					})
