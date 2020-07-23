@@ -178,7 +178,10 @@ class Patalog extends React.Component {
 
 			if (load_json.version < this.state.schemaVersion) {
 				load_json = this.updateCatalog(load_json)
+				console.log(load_json)
 			}
+
+			console.log(load_json)
 			
 			this.props.dispatch({
 				type: 'LOAD_FILE',
@@ -226,6 +229,7 @@ class Patalog extends React.Component {
 			new_json.version = 4
 			version = 4
 		}
+		console.log(new_json)
 		return new_json
 	}
 
