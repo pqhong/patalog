@@ -33,7 +33,6 @@ class Patalog extends React.Component {
 
 		this.handleLoad = this.handleLoad.bind(this)
 		this.dispatchLoad = this.dispatchLoad.bind(this)
-		this.doLoad = this.doLoad.bind(this)
 		this.updateCatalog = this.updateCatalog.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 
@@ -181,12 +180,7 @@ class Patalog extends React.Component {
 
 	dispatchLoad(event) {
 		var load_json = JSON.parse(this.reader.result)
-		console.log(load_json)
-		this.doLoad(load_json)
-	}
 
-	doLoad(event, load_json) {
-		console.log(load_json)
 		if (load_json.version < this.state.schemaVersion) {
 			load_json = this.updateCatalog(load_json)
 		}
