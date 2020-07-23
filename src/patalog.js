@@ -32,6 +32,7 @@ class Patalog extends React.Component {
 		this.handleFreeze = this.handleFreeze.bind(this)
 
 		this.handleLoad = this.handleLoad.bind(this)
+		this.doLoad = this.doLoad.bind(this)
 		this.updateCatalog = this.updateCatalog.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 
@@ -50,6 +51,7 @@ class Patalog extends React.Component {
 		this.setState({
 			saveCookie: !this.state.saveCookie
 		}, this.dispatchCookie)
+		this.setCookie()
 	}
 
 	dispatchCookie(event) {
@@ -175,20 +177,20 @@ class Patalog extends React.Component {
 		var reader = new FileReader()
 		reader.onloadend = () => {
 			var load_json = JSON.parse(reader.result)
-
-			if (load_json.version < this.state.schemaVersion) {
-				load_json = this.updateCatalog(load_json)
-				console.log(load_json)
-			}
-
-			console.log(load_json)
-			
-			this.props.dispatch({
-				type: 'LOAD_FILE',
-				payload: load_json.catalog
-			})
+			this.doLoad(load_json)
 		}
 		reader.readAsText(load_file)
+	}
+
+	doLoad(load_json) {
+		if (load_json.version < this.state.schemaVersion) {
+			load_json = this.updateCatalog(load_json)
+		}
+
+		this.props.dispatch({
+			type: 'LOAD_FILE',
+			payload: load_json.catalog
+		})
 	}
 
 	updateCatalog(old_json) {
@@ -229,7 +231,6 @@ class Patalog extends React.Component {
 			new_json.version = 4
 			version = 4
 		}
-		console.log(new_json)
 		return new_json
 	}
 
@@ -249,17 +250,19 @@ class Patalog extends React.Component {
 	}
 
 	setCookie(event) {
-		var content = {
-			version: this.state.schemaVersion,
-			cookie: this.state.saveCookie,
-			catalog: this.props.catalog
+		if (this.state.saveCookie) {
+			var content = {
+				version: this.state.schemaVersion,
+				cookie: this.state.saveCookie,
+				catalog: this.props.catalog
+			}
+			var data = btoa(JSON.stringify(content))
+			var date = new Date()
+			var expire_days = 500
+			date.setTime(date.getTime() + expire_days*24*60*60*1000)
+			var expires = ';expires=' + date.toUTCString()
+			document.cookie = 'data=' + data + expires + ';path=/'
 		}
-		var data = btoa(JSON.stringify(content))
-		var date = new Date()
-		var expire_days = 500
-		date.setTime(date.getTime() + expire_days*24*60*60*1000)
-		var expires = ';expires=' + date.toUTCString()
-		document.cookie = 'data=' + data + expires + ';path=/'
 	}
 
 	getCookie(event) {
