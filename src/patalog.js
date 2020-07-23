@@ -16,9 +16,6 @@ class Patalog extends React.Component {
 		this.reader = new FileReader()
 
 		this.handleDarkMode = this.handleDarkMode.bind(this)
-
-		this.handleCookie = this.handleCookie.bind(this)
-		this.dispatchCookie = this.dispatchCookie.bind(this)
 		
 		this.handleSearch = this.handleSearch.bind(this)
 		this.handleFilterType = this.handleFilterType.bind(this)
