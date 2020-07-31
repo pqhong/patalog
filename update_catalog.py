@@ -5,100 +5,239 @@ import json
 
 CATALOG_FILENAME = 'catalog.json'
 
-def perform(filename, updates=[]):
+def perform():
     with open(CATALOG_FILENAME, 'r') as f:
         catalog = json.load(f)
 
-    with open(filename, 'r') as f:
-        cat = json.load(f)
+    update_catalog = copy.deepcopy(catalog)
+    version = update_catalog['version']
 
-    new_catalog = copy.deepcopy(catalog)
-    
-    if '1' in updates:
-        new_catalog['catalog'] = perform1(old_catalog=cat, new_catalog=new_catalog['catalog'])
-    else:
-        new_catalog['catalog'] = cat['catalog']
+    if version < 6:
+        update_catalog = perform_1_4_0(update_catalog)
 
-    if '2' in updates:
-        new_catalog['catalog'] = perform2(old_catalog=new_catalog['catalog'], new_catalog=catalog['catalog'])
+    with open(CATALOG_FILENAME, 'w') as f:
+        json.dump(update_catalog, f, separators=(',', ':'))
 
-    if '3' in updates:
-        new_catalog['catalog'] = perform3(old_catalog=new_catalog['catalog'], new_catalog=catalog['catalog'])
+def perform_1_4_0(update_catalog):
+    update_catalog = copy.deepcopy(update_catalog)
+    cat = update_catalog['catalog']
 
-    with open(filename + '_new', 'w') as f:
-        json.dump(new_catalog, f, separators=(',', ':'))
+    items_1_4_0 = [
+        (
+            'lunas bed',
+            {
+                'type': 'furniture',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/FtrTapBedS.png'
+                    }
+                },
+                'get': 'Luna\nAll Year'
+            }
+        ),
+        (
+            'rodeo style springy ride on',
+            {
+                'type': 'furniture',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/FtrSpringriderRodeo.png'
+                    }
+                },
+                'get': 'Nook Shopping Seasonal\nCowboy Festival'
+            }
+        ),
+        (
+            'fireworks show wall',
+            {
+                'type': 'misc',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/RoomSpWallFireworks00.png'
+                    }
+                },
+                'get': 'Nintendo\nUpdate 1.4.0'
+            }
+        ),
+        (
+            'moon rug',
+            {
+                'type': 'misc',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/RugRoundMoonM00.png'
+                    }
+                },
+                'get': 'Nook Shopping Seasonal\nMoon-Viewing Day'
+            }
+        ),
+        (
+            'hikoboshi outfit',
+            {
+                'type': 'fashion',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/TopsTexOnepieceKimonoLWeavermen0.png'
+                    }
+                },
+                'get': 'Nook Shopping Seasonal\nCowherd & Weaver Girl Day'
+            }
+        ),
+        (
+            'orihime outfit',
+            {
+                'type': 'fashion',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/TopsTexOnepieceKimonoLWeaverwomen0.png'
+                    }
+                },
+                'get': 'Nook Shopping Seasonal\nCowherd & Weaver Girl Day'
+            }
+        ),
+        (
+            'bulb bopper',
+            {
+                'type': 'fashion',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/CapOrnamentFBallband0.png'
+                    }
+                },
+                'get': 'Isabelle\nFireworks Display'
+            }
+        ),
+        (
+            'flower bopper',
+            {
+                'type': 'fashion',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/CapOrnamentFFlowerband0.png'
+                    }
+                },
+                'get': 'Isabelle\nFireworks Display'
+            }
+        ),
+        (
+            'heart bopper',
+            {
+                'type': 'fashion',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/CapOrnamentFHeartband0.png'
+                    }
+                },
+                'get': 'Isabelle\nFireworks Display'
+            }
+        ),
+        (
+            'king tut mask',
+            {
+                'type': 'fashion',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/CapFullfaceKingtut0.png'
+                    }
+                },
+                'get': 'Crafting\nAll Year'
+            }
+        ),
+        (
+            'star bopper',
+            {
+                'type': 'fashion',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/CapOrnamentFStarband0.png'
+                    }
+                },
+                'get': 'Isabelle\nFireworks Display'
+            }
+        ),
+        (
+            'grape harvest basket',
+            {
+                'type': 'fashion',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': 'https://acnhcdn.com/latest/FtrIcon/BagBackpackHarvest0.png'
+                    }
+                },
+                'get': 'Nook Shopping Seasonal\nGrape Harvest Festival'
+            }
+        ),
+        (
+            'king tut mask ',
+            {
+                'type': 'diy',
+                'have': False,
+                'vars': {
+                    '0': {
+                        'variation': 'N/A',
+                        'have': False,
+                        'img': ''
+                    }
+                },
+                'get': 'Digging\nPicking up gold nuggets knocked out of rocks'
+            }
+        )
+    ]
 
-def perform1(old_catalog, new_catalog):
-    for item_name in old_catalog.keys():
-        new_catalog[item_name]['have'] = old_catalog[item_name]['have']
-        for var in old_catalog[item_name]['vars'].keys():
-            for vid in new_catalog[item_name]['vars'].keys():
-                if new_catalog[item_name]['vars'][vid]['variation'] == var:
-                    new_catalog[item_name]['vars'][vid]['have'] = old_catalog[item_name]['vars'][var]
+    for item in items_1_4_0:
+        cat[item[0]] = item[1]
 
-    return new_catalog
+    # Fix some previous item data
+    cat['bamboo grass']['get'] = 'Nook Shopping Seasonal\nTanabata'
+    cat['handmade cape']['get'] = 'Nook Shopping Seasonal\nInternational Children\'s Day'
+    cat['handmade crown']['get'] = 'Nook Shopping Seasonal\nInternational Children\'s Day'
+    cat['summer solstice crown']['get'] = 'Nook Shopping Seasonal\nSummer Solstice Festival'
+    cat['thank you dad mug']['get'] = 'Nook Shopping Seasonal\nFather\'s Day'
+    cat['thank you mom mug']['get'] = 'Nook Shopping Seasonal\nMother\'s Day'
+    cat['winter solstice sweater']['get'] = 'Nook Shopping Seasonal\nWinter Solstice Festival'
 
-def perform2(old_catalog, new_catalog):
-    new_catalog = copy.deepcopy(new_catalog)
-
-    for vid in old_catalog['frying pan']['vars'].keys():
-        if old_catalog['frying pan']['vars'][vid]['variation'] == 'Veggie saut\u00e9':
-            old_catalog['frying pan']['vars'][vid]['variation'] = 'Veggie saute'
-
-    for vid in old_catalog['exit sign']['vars'].keys():
-        if old_catalog['exit sign']['vars'][vid]['variation'] == '\u2190 \u2192':
-            old_catalog['exit sign']['vars'][vid]['variation'] = '< >'
-        if old_catalog['exit sign']['vars'][vid]['variation'] == '\u2190':
-            old_catalog['exit sign']['vars'][vid]['variation'] = '<'
-        if old_catalog['exit sign']['vars'][vid]['variation'] == '\u2192':
-            old_catalog['exit sign']['vars'][vid]['variation'] = '>'
-
-    for item_name in old_catalog.keys():
-        new_catalog[item_name]['have'] = old_catalog[item_name]['have']
-        for vid in old_catalog[item_name]['vars'].keys():
-            new_catalog[item_name]['vars'][vid]['have'] = old_catalog[item_name]['vars'][vid]['have']
-
-    return new_catalog
-
-def perform3(old_catalog, new_catalog):
-    new_catalog = copy.deepcopy(new_catalog)
-
-    for item_name in new_catalog.keys():
-        if isinstance(old_catalog[item_name]['vars'], list):
-            for ovid in range(len(old_catalog[item_name]['vars'])):
-                for nvid in new_catalog[item_name]['vars'].keys():
-                    if new_catalog[item_name]['vars'][nvid]['variation'] == old_catalog[item_name]['vars'][ovid]['variation']:
-                        new_catalog[item_name]['vars'][nvid]['have'] = old_catalog[item_name]['vars'][ovid]['have']
-        else:
-            for ovid in old_catalog[item_name]['vars'].keys():
-                for nvid in new_catalog[item_name]['vars'].keys():
-                    if new_catalog[item_name]['vars'][nvid]['variation'] == old_catalog[item_name]['vars'][ovid]['variation']:
-                        new_catalog[item_name]['vars'][nvid]['have'] = old_catalog[item_name]['vars'][ovid]['have']
-        new_catalog[item_name]['have'] = old_catalog[item_name]['have']
-        if new_catalog[item_name]['have']:
-            for vid in new_catalog[item_name]['vars'].keys():
-                new_catalog[item_name]['vars'][vid]['have'] = True
-
-    return new_catalog
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-f', type=str, dest='filename', required=True, help='catalog file to be updated')
-    parser.add_argument('-1', action='store_true', dest='update1', required=False, help='perform update 1')
-    parser.add_argument('-2', action='store_true', dest='update2', required=False, help='perform update 2')
-    parser.add_argument('-3', action='store_true', dest='update3', required=False, help='perform update 3')
-    return parser.parse_args()
+    update_catalog['catalog'] = cat
+    update_catalog['version'] = 6
+    return update_catalog
 
 def main():
-    args = parse_args()
-    updates = []
-    if args.update1:
-        updates.append('1')
-    if args.update2:
-        updates.append('2')
-    if args.update3:
-        updates.append('3')
-    perform(filename=args.filename, updates=updates)
+    perform()
 
 if __name__ == '__main__':
     main()

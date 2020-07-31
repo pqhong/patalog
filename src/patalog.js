@@ -11,7 +11,7 @@ class Patalog extends React.Component {
 			darkMode: false,
 			frozenRows: [],
 			frozenOnly: false,
-			schemaVersion: 5
+			schemaVersion: 6
 		}
 
 		this.handleDarkMode = this.handleDarkMode.bind(this)
@@ -28,6 +28,7 @@ class Patalog extends React.Component {
 
 		this.handleLoad = this.handleLoad.bind(this)
 		this.updateCatalog = this.updateCatalog.bind(this)
+		this.simpleItemUpdate = this.simpleItemUpdate.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 	}
 
@@ -166,7 +167,7 @@ class Patalog extends React.Component {
 	updateCatalog(update_json) {
 		var version = update_json.version
 		if (version < 4) {
-			var new_catalog = this.props.catalog
+			var new_catalog = JSON.parse(JSON.stringify(this.props.catalog))  // Simple deep-copy
 			var old_catalog = update_json.catalog
 
 			Object.keys(new_catalog).forEach(item_name => {
@@ -207,7 +208,35 @@ class Patalog extends React.Component {
 			}
 			version = 5
 		}
+		if (version < 6) {
+			var new_catalog = JSON.parse(JSON.stringify(this.props.catalog))  // Simple deep-copy
+			var old_catalog = update_json.catalog
+
+			new_catalog = this.simpleItemUpdate(old_catalog, new_catalog)
+
+			update_json = {
+				catalog: new_catalog,
+				version: 6
+			}
+			version = 6
+		}
 		return update_json
+	}
+
+	simpleItemUpdate(old_catalog, new_catalog) {
+		Object.keys(old_catalog).forEach(item_name => {
+			new_catalog[item_name].have = old_catalog[item_name].have
+			if (new_catalog[item_name].have) {
+				Object.keys(new_catalog[item_name].vars).forEach(vid => {
+					new_catalog[item_name].vars[vid].have = true
+				})
+			} else {
+				Object.keys(old_catalog[item_name].vars).forEach(vid => {
+					new_catalog[item_name].vars[vid].have = old_catalog[item_name].vars[vid].have
+				})
+			}
+		})
+		return new_catalog
 	}
 
 	handleSave(event) {
@@ -271,7 +300,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.1.0</div>
+					<div style={{fontSize: '80%'}}>v2.2.0</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
