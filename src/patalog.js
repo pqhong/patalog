@@ -37,6 +37,10 @@ class Patalog extends React.Component {
 		this.simpleItemUpdate = this.simpleItemUpdate.bind(this)
 		this.updateStats = this.updateStats.bind(this)
 		this.handleSave = this.handleSave.bind(this)
+
+		this.getItemList = this.getItemList.bind(this)
+
+		this.updateStats()
 	}
 
 	handleDarkMode(event) {
@@ -113,6 +117,8 @@ class Patalog extends React.Component {
 				}
 			}
 		})
+
+		this.updateStats()
 	}
 	
 	handleToggleVariation(event, item, vid) {
@@ -142,6 +148,8 @@ class Patalog extends React.Component {
 				}
 			}
 		})
+
+		this.updateStats()
 	}
 
 	handleFreeze(event, val) {
@@ -171,6 +179,8 @@ class Patalog extends React.Component {
 				type: 'LOAD_FILE',
 				payload: load_json.catalog
 			})
+
+			this.updateStats()
 	
 			this.forceUpdate()
 		}
@@ -252,7 +262,8 @@ class Patalog extends React.Component {
 		return new_catalog
 	}
 
-	updateStats(item_list) {
+	updateStats() {
+		var item_list = this.getItemList()
 		var stats = {}
 		stats[''] = {
 			total: item_list.length,
@@ -284,9 +295,9 @@ class Patalog extends React.Component {
 		element.click()
 		document.body.removeChild(element)
 	}
-	
-	render() {
-		var item_list = Object.keys(this.props.catalog).map(name => (
+
+	getItemList() {
+		return Object.keys(this.props.catalog).map(name => (
 			{
 				name: name,
 				type: this.props.catalog[name].type,
@@ -302,8 +313,10 @@ class Patalog extends React.Component {
 				get: this.props.catalog[name].get
 			}
 		))
-
-		this.updateStats(item_list)
+	}
+	
+	render() {
+		var item_list = this.getItemList()
 
 		var filtered_items = item_list
 		if (this.state.frozenOnly) {
@@ -333,7 +346,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.3.0</div>
+					<div style={{fontSize: '80%'}}>v2.3.1</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
