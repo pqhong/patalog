@@ -346,7 +346,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.3.12</div>
+					<div style={{fontSize: '80%'}}>v2.3.13</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
@@ -573,7 +573,7 @@ function CompletionStats(props) {
 			filterType: filterType,
 			complete: props.stats[filterType].complete,
 			incomplete: props.stats[filterType].total - props.stats[filterType].complete,
-			total: props.state[filterType].total
+			total: props.stats[filterType].total
 		})
 	})
 
