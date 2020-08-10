@@ -1,16 +1,21 @@
 import React from 'react';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import * as d3 from 'd3';
+
+const allFilterTypes = ['furniture', 'fashion', 'misc', 'diy', 'fish', 'bugs', 'sea'];
 
 class Patalog extends React.Component {
 	constructor() {
 		super()
 		this.state = {
 			searchVal: '',
-			filterTypes: ['furniture', 'fashion', 'misc', 'diy', 'fish', 'bugs', 'sea'],
+			filterTypes: allFilterTypes.slice(),
 			filterDone: [true, false],
 			darkMode: false,
 			frozenRows: [],
 			frozenOnly: false,
+			stats: {},
+			showStats: false,
 			schemaVersion: 6
 		}
 
@@ -20,6 +25,7 @@ class Patalog extends React.Component {
 		this.handleFilterType = this.handleFilterType.bind(this)
 		this.handleFilterDone = this.handleFilterDone.bind(this)
 		this.handleToggleFrozen = this.handleToggleFrozen.bind(this)
+		this.handleToggleStats = this.handleToggleStats.bind(this)
 
 		this.handleToggleHave = this.handleToggleHave.bind(this)
 		this.handleToggleVariation = this.handleToggleVariation.bind(this)
@@ -29,6 +35,7 @@ class Patalog extends React.Component {
 		this.handleLoad = this.handleLoad.bind(this)
 		this.updateCatalog = this.updateCatalog.bind(this)
 		this.simpleItemUpdate = this.simpleItemUpdate.bind(this)
+		this.updateStats = this.updateStats.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 	}
 
@@ -73,6 +80,12 @@ class Patalog extends React.Component {
 	handleToggleFrozen(event) {
 		this.setState({
 			frozenOnly: !this.state.frozenOnly
+		})
+	}
+
+	handleToggleStats(event) {
+		this.setState({
+			showStats: !this.state.showStats
 		})
 	}
 	
@@ -239,6 +252,24 @@ class Patalog extends React.Component {
 		return new_catalog
 	}
 
+	updateStats(item_list) {
+		var stats = {}
+		stats[''] = {
+			total: item_list.length,
+			complete: item_list.filter(item => item.have).length
+		}
+		allFilterTypes.forEach(filterType => {
+			var filter_list = item_list.filter(item => item.type == filterType)
+			stats[filterType] = {
+				total: filter_list.length,
+				complete: filter_list.filter(item => item.have).length
+			}
+		})
+		this.setState({
+			stats: stats
+		})
+	}
+
 	handleSave(event) {
 		var content = {
 			version: this.state.schemaVersion,
@@ -272,6 +303,8 @@ class Patalog extends React.Component {
 			}
 		))
 
+		this.updateStats(item_list)
+
 		var filtered_items = item_list
 		if (this.state.frozenOnly) {
 			filtered_items = filtered_items.filter(item => this.state.frozenRows.includes(item.name))
@@ -300,7 +333,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.2.0</div>
+					<div style={{fontSize: '80%'}}>v2.3.0</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
@@ -417,6 +450,10 @@ class Patalog extends React.Component {
 					</div>
 
 					<div style={{margin: '15px'}}>
+						<CompletionStats showStats={this.state.showStats} stats={this.state.stats} />
+					</div>
+
+					<div style={{margin: '15px'}}>
 						<input
 							type="text"
 							value={this.state.searchVal}
@@ -501,6 +538,99 @@ function ImageLink(props) {
 				       [image]
 			   </a>
 		   </span>;
+}
+
+function CompletionStats(props) {
+	if (!props.showStats) {
+		return <div>Show Completion Stats &#9660;</div>;
+	}
+
+	var categoryData = []
+	allFilterTypes.forEach(filterType => {
+		categoryData.append({
+			filterType: filterType,
+			complete: props.stats[filterType].complete,
+			incomplete: props.stats[filterType].total - props.stats[filterType].complete
+		})
+	})
+
+	const progressWidth = window.innerWidth() * 0.5
+	const progressHeight = 40
+	const progress = d3.select('progress').append('svg').attr('viewBox', [0, 0, progressWidth, progressHeight])
+	const progressScale = d3.scaleLinear().domain([0, props.stats[''].total]).range([0, progressWidth])
+	const completeColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemeDark2)
+	const incompleteColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemeSet2)
+
+	function completePosition(filterType) {
+		const end = allFilterTypes.indexOf(filterType)
+		var x = 0
+		for (var i = 0; i < end; i++) {
+			const completeCount = props.stats[allFilterTypes[i]].complete
+			x += progressScale(completeCount)
+		}
+		return x
+	}
+
+	function incompletePosition(filterType) {
+		var x = 0
+		for (var i = 0; i < allFilterTypes.length; i++) {
+			const completeCount = props.stats[allFilterTypes[i]].complete
+			x += progressScale(completeCount)
+		}
+
+		const end = allFilterTypes.indexOf(filterType)
+		for (var i = 0; i < end; i++) {
+			const incompleteCount = props.stats[allFilterTypes[i]].total - props.stats[allFilterTypes[i]].complete
+			x += progressScale(incompleteCount)
+		}
+		return x
+	}
+
+	progress.append('g')
+				.style('stroke', 'black')
+			.selectAll('rect')
+			.data(categoryData)
+			.join('rect')
+				.attr('fill', d => completeColor(d.filterType))
+				.attr('x', d => completePosition(d.filterType))
+				.attr('y', 0)
+				.attr('height', progressHeight)
+				.attr('width', d => progressScale(d.complete))
+	progress.append('g')
+				.style('stroke', 'black')
+			.selectAll('rect')
+			.data(categoryData)
+			.join('rect')
+				.attr('fill', d => incompleteColor(d.filterType))
+				.attr('x', d => incompletePosition(d.filterType))
+				.attr('y', 0)
+				.attr('height', progressHeight)
+				.attr('width', d => progressScale(d.incomplete))
+
+	const ratioSide = window.innerWidth() * 0.3
+	const ratio = d3.select('ratio').append('svg').attr('viewBox', [-ratioSide/2, -ratioSide/2, ratioSide, ratioSide])
+	const ratioArc = d3.arc().innerRadius(0).outerRadius(ratioSide/2)
+	const ratioPie = d3.pie().value(d => d.complete)(categoryData)
+	const ratioColor = d3.scaleOrdinal().domain(ratioPie).range(d3.schemeDark2)
+
+	ratio.append('g')
+		 	.style('stroke', 'black')
+		.selectAll('path')
+		.data(ratioPie)
+		.join('path')
+			.attr('fill', d => ratioColor(d))
+			.attr('d', ratioArc)
+
+	return <div>
+		<div style={{margin: '15px'}}>Hide Completion Stats &#9650;</div>
+		<div>
+			<div style={{margin: '15px'}}>
+				<div id="progress" />
+				<span>{props.stats[''].complete}/{props.stats[''].total}</span>
+			</div>
+			<div style={{margin: '15px'}} id="ratio"></div>
+		</div>
+	</div>;
 }
 
 const mapStateToProps = state => {
