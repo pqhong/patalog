@@ -14,7 +14,6 @@ class Patalog extends React.Component {
 			darkMode: false,
 			frozenRows: [],
 			frozenOnly: false,
-			stats: {},
 			showStats: false,
 			schemaVersion: 6
 		}
@@ -35,12 +34,10 @@ class Patalog extends React.Component {
 		this.handleLoad = this.handleLoad.bind(this)
 		this.updateCatalog = this.updateCatalog.bind(this)
 		this.simpleItemUpdate = this.simpleItemUpdate.bind(this)
-		this.updateStats = this.updateStats.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 
+		this.getStats = this.getStats.bind(this)
 		this.getItemList = this.getItemList.bind(this)
-
-		this.updateStats()
 	}
 
 	handleDarkMode(event) {
@@ -117,8 +114,6 @@ class Patalog extends React.Component {
 				}
 			}
 		})
-
-		this.updateStats()
 	}
 	
 	handleToggleVariation(event, item, vid) {
@@ -148,8 +143,6 @@ class Patalog extends React.Component {
 				}
 			}
 		})
-
-		this.updateStats()
 	}
 
 	handleFreeze(event, val) {
@@ -179,8 +172,6 @@ class Patalog extends React.Component {
 				type: 'LOAD_FILE',
 				payload: load_json.catalog
 			})
-
-			this.updateStats()
 	
 			this.forceUpdate()
 		}
@@ -262,7 +253,7 @@ class Patalog extends React.Component {
 		return new_catalog
 	}
 
-	updateStats() {
+	getStats() {
 		var item_list = this.getItemList()
 		var stats = {}
 		stats[''] = {
@@ -276,9 +267,7 @@ class Patalog extends React.Component {
 				complete: filter_list.filter(item => item.have).length
 			}
 		})
-		this.setState({
-			stats: stats
-		})
+		return stats
 	}
 
 	handleSave(event) {
@@ -346,7 +335,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.3.1</div>
+					<div style={{fontSize: '80%'}}>v2.3.2</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
@@ -463,7 +452,7 @@ class Patalog extends React.Component {
 					</div>
 
 					<div style={{margin: '15px'}}>
-						<CompletionStats showStats={this.state.showStats} stats={this.state.stats} />
+						<CompletionStats showStats={this.state.showStats} stats={this.getStats()} />
 					</div>
 
 					<div style={{margin: '15px'}}>
