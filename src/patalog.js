@@ -335,7 +335,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.3.4</div>
+					<div style={{fontSize: '80%'}}>v2.3.5</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
@@ -452,6 +452,15 @@ class Patalog extends React.Component {
 					</div>
 
 					<div style={{margin: '15px'}}>
+						<input
+							type="checkbox"
+							checked={this.state.showStats}
+							onChange={event => this.handleToggleStats(event)}
+						/>
+						Show Completion Stats
+					</div>
+
+					<div style={{margin: '15px'}}>
 						<CompletionStats showStats={this.state.showStats} stats={this.getStats()} />
 					</div>
 
@@ -544,7 +553,7 @@ function ImageLink(props) {
 
 function CompletionStats(props) {
 	if (!props.showStats) {
-		return <div onClick={event => this.handleToggleStats}>Show Completion Stats &#9660;</div>;
+		return <div />;
 	}
 
 	var categoryData = []
@@ -624,14 +633,11 @@ function CompletionStats(props) {
 			.attr('d', ratioArc)
 
 	return <div>
-		<div style={{margin: '15px'}} onClick={event => this.handleToggleStats}>Hide Completion Stats &#9650;</div>
-		<div>
-			<div style={{margin: '15px'}}>
-				<div id="progress" />
-				<span>{props.stats[''].complete}/{props.stats[''].total}</span>
-			</div>
-			<div style={{margin: '15px'}} id="ratio"></div>
+		<div style={{margin: '15px'}}>
+			<div id="progress" />
+			<span>{props.stats[''].complete}/{props.stats[''].total}</span>
 		</div>
+		<div style={{margin: '15px'}} id="ratio"></div>
 	</div>;
 }
 
