@@ -3,6 +3,15 @@ import { connect } from 'react-redux';
 import * as d3 from 'd3';
 
 const allFilterTypes = ['furniture', 'fashion', 'misc', 'diy', 'fish', 'bugs', 'sea'];
+const filterTypeMap = {
+	'furniture': 'Furniture',
+	'fashion': 'Fashion',
+	'misc': 'Misc',
+	'diy': 'DIY',
+	'fish': 'Fish',
+	'bugs': 'Bugs',
+	'sea': 'Sea Creatures'
+}
 
 class Patalog extends React.Component {
 	constructor() {
@@ -337,7 +346,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.3.10</div>
+					<div style={{fontSize: '80%'}}>v2.3.11</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
@@ -571,14 +580,14 @@ function CompletionStats(props) {
 
 	const progressWidth = window.innerWidth * 0.5
 	const progressHeight = 30
-	const progress = d3.select('#progress').append('svg').attr('viewBox', [0, 0, progressWidth, progressHeight]).attr('width', progressWidth).attr('height', progressHeight)
+	const progress = d3.select('#progress').append('svg').attr('viewBox', [0, 0, progressWidth + 4, progressHeight + 4]).attr('width', progressWidth + 4).attr('height', progressHeight + 4)
 	const progressScale = d3.scaleLinear().domain([0, props.stats[''].total]).range([0, progressWidth])
 	const completeColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemeDark2)
 	const incompleteColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemeSet2)
 
 	function completePosition(filterType) {
 		const end = allFilterTypes.indexOf(filterType)
-		var x = 0
+		var x = 2
 		for (var i = 0; i < end; i++) {
 			const completeCount = props.stats[allFilterTypes[i]].complete
 			x += progressScale(completeCount)
@@ -587,7 +596,7 @@ function CompletionStats(props) {
 	}
 
 	function incompletePosition(filterType) {
-		var x = 0
+		var x = 2
 		for (var i = 0; i < allFilterTypes.length; i++) {
 			const completeCount = props.stats[allFilterTypes[i]].complete
 			x += progressScale(completeCount)
@@ -601,6 +610,16 @@ function CompletionStats(props) {
 		return x
 	}
 
+	function completeTooltip(d) {
+		var filterType = filterTypeMap[d.filterType]
+		return filterType + '\n' + d.complete + '/' + d.total
+	}
+
+	function incompleteTooltip(d) {
+		var filterType = filterTypeMap[d.filterType]
+		return filterType + '\n' + d.incomplete + '/' + d.total
+	}
+
 	progress.append('g')
 				.style('stroke', 'black')
 			.selectAll('rect')
@@ -608,9 +627,11 @@ function CompletionStats(props) {
 			.join('rect')
 				.attr('fill', d => completeColor(d.filterType))
 				.attr('x', d => completePosition(d.filterType))
-				.attr('y', 0)
+				.attr('y', 2)
 				.attr('height', progressHeight)
 				.attr('width', d => progressScale(d.complete))
+			.append('title')
+				.text(d => completeTooltip(d))
 	progress.append('g')
 				.style('stroke', 'black')
 			.selectAll('rect')
@@ -618,15 +639,25 @@ function CompletionStats(props) {
 			.join('rect')
 				.attr('fill', d => incompleteColor(d.filterType))
 				.attr('x', d => incompletePosition(d.filterType))
-				.attr('y', 0)
+				.attr('y', 2)
 				.attr('height', progressHeight)
 				.attr('width', d => progressScale(d.incomplete))
+			.append('title')
+				.text(d => incompleteTooltip(d))
 
 	const ratioSide = window.innerWidth * 0.3
-	const ratio = d3.select('#ratio').append('svg').attr('viewBox', [-ratioSide/2, -ratioSide/2, ratioSide, ratioSide]).attr('width', ratioSide).attr('height', ratioSide)
+	const ratio = d3.select('#ratio').append('svg').attr('viewBox', [-ratioSide/2 - 2, -ratioSide/2 - 2, ratioSide + 4, ratioSide + 4])
+					.attr('width', ratioSide + 4).attr('height', ratioSide + 4)
 	const ratioArc = d3.arc().innerRadius(0).outerRadius(ratioSide/2)
 	const ratioPie = d3.pie().value(d => d.complete)(categoryData)
 	const ratioColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemeDark2)
+
+	function ratioTooltip(idx) {
+		var d = categoryData[idx]
+		var filterType = filterTypeMap[d.filterType]
+		var percent = (d.complete / d.total) * 100
+		return filterType + '\n' + percent + '%'
+	}
 
 	ratio.append('g')
 		 	.style('stroke', 'black')
@@ -635,6 +666,8 @@ function CompletionStats(props) {
 		.join('path')
 			.attr('fill', d => ratioColor(d.index))
 			.attr('d', ratioArc)
+		.append('title')
+			.text(d => ratioTooltip(d.index))
 
 	return <div>
 		<div style={{margin: '15px'}}>
