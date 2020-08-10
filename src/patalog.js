@@ -335,7 +335,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.3.7</div>
+					<div style={{fontSize: '80%'}}>v2.3.8</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
@@ -567,7 +567,7 @@ function CompletionStats(props) {
 
 	const progressWidth = window.innerWidth * 0.5
 	const progressHeight = 40
-	const progress = d3.select('progress').append('svg').attr('viewBox', [0, 0, progressWidth, progressHeight])
+	const progress = d3.select('#progress').append('svg').attr('viewBox', [0, 0, progressWidth, progressHeight])
 	const progressScale = d3.scaleLinear().domain([0, props.stats[''].total]).range([0, progressWidth])
 	const completeColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemeDark2)
 	const incompleteColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemeSet2)
@@ -619,7 +619,7 @@ function CompletionStats(props) {
 				.attr('width', d => progressScale(d.incomplete))
 
 	const ratioSide = window.innerWidth * 0.3
-	const ratio = d3.select('ratio').append('svg').attr('viewBox', [-ratioSide/2, -ratioSide/2, ratioSide, ratioSide])
+	const ratio = d3.select('#ratio').append('svg').attr('viewBox', [-ratioSide/2, -ratioSide/2, ratioSide, ratioSide])
 	const ratioArc = d3.arc().innerRadius(0).outerRadius(ratioSide/2)
 	const ratioPie = d3.pie().value(d => d.complete)(categoryData)
 	const ratioColor = d3.scaleOrdinal().domain(ratioPie).range(d3.schemeDark2)
@@ -637,7 +637,7 @@ function CompletionStats(props) {
 			<div id="progress" />
 			<span>{props.stats[''].complete}/{props.stats[''].total}</span>
 		</div>
-		<div style={{margin: '15px'}} id="ratio"></div>
+		<div style={{margin: '15px'}} id="ratio" />
 	</div>;
 }
 
