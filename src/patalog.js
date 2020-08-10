@@ -335,7 +335,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.3.3</div>
+					<div style={{fontSize: '80%'}}>v2.3.4</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
@@ -544,7 +544,7 @@ function ImageLink(props) {
 
 function CompletionStats(props) {
 	if (!props.showStats) {
-		return <div onclick={event => this.handleToggleStats}>Show Completion Stats &#9660;</div>;
+		return <div onClick={event => this.handleToggleStats}>Show Completion Stats &#9660;</div>;
 	}
 
 	var categoryData = []
@@ -624,7 +624,7 @@ function CompletionStats(props) {
 			.attr('d', ratioArc)
 
 	return <div>
-		<div style={{margin: '15px'}} onclick={event => this.handleToggleStats}>Hide Completion Stats &#9650;</div>
+		<div style={{margin: '15px'}} onClick={event => this.handleToggleStats}>Hide Completion Stats &#9650;</div>
 		<div>
 			<div style={{margin: '15px'}}>
 				<div id="progress" />
