@@ -346,7 +346,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.3.13</div>
+					<div style={{fontSize: '80%'}}>v2.3.14</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
@@ -584,7 +584,7 @@ function CompletionStats(props) {
 	const progress = d3.select('#progress').append('svg').attr('viewBox', [0, 0, progressWidth + 4, progressHeight + 4]).attr('width', progressWidth + 4).attr('height', progressHeight + 4)
 	const progressScale = d3.scaleLinear().domain([0, props.stats[''].total]).range([0, progressWidth])
 	const completeColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemeDark2)
-	const incompleteColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemeSet2)
+	const incompleteColor = d3.scaleOrdinal().domain(allFilterTypes).range(d3.schemePastel2)
 
 	function completePosition(filterType) {
 		const end = allFilterTypes.indexOf(filterType)
@@ -656,7 +656,7 @@ function CompletionStats(props) {
 	function ratioTooltip(idx) {
 		var d = categoryData[idx]
 		var filterType = filterTypeMap[d.filterType]
-		var percent = (d.complete / d.total) * 100
+		var percent = (d.complete / props.stats[''].complete) * 100
 		return filterType + '\n' + percent + '%'
 	}
 
