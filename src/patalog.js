@@ -233,7 +233,7 @@ class Patalog extends React.Component {
 			}
 			version = 5
 		}
-		if (version < 6) {
+		if (version < 7) {
 			var new_catalog = JSON.parse(JSON.stringify(this.props.catalog))  // Simple deep-copy
 			var old_catalog = update_json.catalog
 
@@ -241,9 +241,9 @@ class Patalog extends React.Component {
 
 			update_json = {
 				catalog: new_catalog,
-				version: 6
+				version: 7
 			}
-			version = 6
+			version = 7
 		}
 		return update_json
 	}
@@ -346,7 +346,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.3.14</div>
+					<div style={{fontSize: '80%'}}>v2.4.0</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
