@@ -24,7 +24,7 @@ class Patalog extends React.Component {
 			frozenRows: [],
 			frozenOnly: false,
 			showStats: false,
-			schemaVersion: 6
+			schemaVersion: 7
 		}
 
 		this.handleDarkMode = this.handleDarkMode.bind(this)
