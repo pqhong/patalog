@@ -24,7 +24,7 @@ class Patalog extends React.Component {
 			frozenRows: [],
 			frozenOnly: false,
 			showStats: false,
-			schemaVersion: 8
+			schemaVersion: 9
 		}
 
 		this.handleDarkMode = this.handleDarkMode.bind(this)
@@ -233,7 +233,7 @@ class Patalog extends React.Component {
 			}
 			version = 5
 		}
-		if (version < 8) {
+		if (version < 9) {
 			var new_catalog = JSON.parse(JSON.stringify(this.props.catalog))  // Simple deep-copy
 			var old_catalog = update_json.catalog
 
@@ -346,7 +346,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.5.0</div>
+					<div style={{fontSize: '80%'}}>v2.6.0</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
