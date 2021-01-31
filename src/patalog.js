@@ -241,9 +241,9 @@ class Patalog extends React.Component {
 
 			update_json = {
 				catalog: new_catalog,
-				version: 8
+				version: 9
 			}
-			version = 8
+			version = 9
 		}
 		return update_json
 	}
@@ -346,7 +346,7 @@ class Patalog extends React.Component {
 			<div>
 				<header style={{align: 'center'}}>
 					<div style={{marginTop: '15px', fontSize: '200%'}}>Patalog</div>
-					<div style={{fontSize: '80%'}}>v2.6.0</div>
+					<div style={{fontSize: '80%'}}>v2.6.1</div>
 					<button style={{marginTop: '15px'}} onClick={this.handleDarkMode}>
 						Dark Mode
 					</button>
